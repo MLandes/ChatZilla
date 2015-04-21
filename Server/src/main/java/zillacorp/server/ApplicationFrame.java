@@ -27,21 +27,84 @@ public class ApplicationFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        DatenbankLabel = new javax.swing.JLabel();
+        DbIpComboBox = new javax.swing.JComboBox();
+        VerbindenButton = new javax.swing.JButton();
+        StatusLabel = new javax.swing.JLabel();
+        BeendenButton = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("ChatZilla Server");
+        setName("ChatZillaServerFrame"); // NOI18N
+
+        DatenbankLabel.setText("Datenbank:");
+
+        DbIpComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.53.124", "172.16.59.230" }));
+        DbIpComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DbIpComboBoxActionPerformed(evt);
+            }
+        });
+
+        VerbindenButton.setText("Verbinden");
+        VerbindenButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerbindenButtonActionPerformed(evt);
+            }
+        });
+
+        StatusLabel.setText("nicht verbunden");
+
+        BeendenButton.setText("Beenden");
+        BeendenButton.setName(""); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(StatusLabel)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(DatenbankLabel)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(DbIpComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(VerbindenButton)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BeendenButton)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DatenbankLabel)
+                    .addComponent(DbIpComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(VerbindenButton)
+                .addGap(43, 43, 43)
+                .addComponent(StatusLabel)
+                .addGap(18, 18, 18)
+                .addComponent(BeendenButton))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void DbIpComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DbIpComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DbIpComboBoxActionPerformed
+
+    private void VerbindenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerbindenButtonActionPerformed
+         
+    }//GEN-LAST:event_VerbindenButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +142,10 @@ public class ApplicationFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BeendenButton;
+    private javax.swing.JLabel DatenbankLabel;
+    private javax.swing.JComboBox DbIpComboBox;
+    private javax.swing.JLabel StatusLabel;
+    private javax.swing.JButton VerbindenButton;
     // End of variables declaration//GEN-END:variables
 }
