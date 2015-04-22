@@ -16,7 +16,7 @@ import zillacorp.model.Message;
  */
 public class ServerThread extends Thread implements Runnable
 {
-    DatabaseThread databaseThread;
+    DatabaseMessageThread databaseThread;
     ServerSocketHandlerThread serverSocketHandlerThread;
     ArrayList<ClientSocketThread> clientSocketThreads;
     
@@ -26,7 +26,7 @@ public class ServerThread extends Thread implements Runnable
     
     public ServerThread(String databaseIp)
     {
-        databaseThread = new DatabaseThread(databaseIp);
+        databaseThread = new DatabaseMessageThread(databaseIp);
     }
     
     public void run()
