@@ -20,13 +20,13 @@ public class ServerThread extends Thread implements Runnable
     ServerSocketHandlerThread serverSocketHandlerThread;
     ArrayList<ClientSocketThread> clientSocketThreads;
     
-    ConcurrentLinkedQueue<Message> messagesFromClients;
-    ConcurrentLinkedQueue<Message> messagesFromDatabase;
-    ConcurrentLinkedQueue<Socket> newlyAcceptedClientSockets;
+    static ConcurrentLinkedQueue<Message> messagesFromClients;
+    static ConcurrentLinkedQueue<Message> messagesFromDatabase;
+    static ConcurrentLinkedQueue<Socket> newlyAcceptedClientSockets;
     
-    public ServerThread(String DatabaseIp)
+    public ServerThread(String databaseIp)
     {
-        
+        databaseThread = new DatabaseThread(databaseIp);
     }
     
     public void run()
