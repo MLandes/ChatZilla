@@ -16,6 +16,6 @@ public class Message
     public String _id;
     public String _rev;
     public String message;
-    public Date serverTime;
+    public long serverTimeStamp;
     public String userNickname;
 }
