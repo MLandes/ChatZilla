@@ -7,6 +7,7 @@ package zillacorp.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.util.ArrayList;
 import org.lightcouch.Changes;
 import org.lightcouch.ChangesResult;
 import org.lightcouch.CouchDbClient;
@@ -24,7 +25,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
     
     public DatabaseMessageThread(String databaseIp)
     {
-        connectToMessageDatabse(databaseIp);
+        connectToMessageDatbase(databaseIp);
     }
     
     public void run()
@@ -40,6 +41,15 @@ public class DatabaseMessageThread extends Thread implements Runnable
                 ServerThread.messagesFromDatabase.add(message);
             }
         }
+    }
+    
+    public void sendToDatabase(Message message)
+    {
+        messageDatabaseClient.save(message);
+    }
+    
+    public ArrayList<Message> getHistorySince(long timeStamp)
+    {
         
     }
 
@@ -52,14 +62,9 @@ public class DatabaseMessageThread extends Thread implements Runnable
                 .since(lastUpdateSequence)
                 .heartBeat(30000)
                 .continuousChanges();
-    }
-    
-    public void sendToDatabase(Message message)
-    {
-        messageDatabaseClient.save(message);
-    }
+    }    
 
-    private void connectToMessageDatabse(String databaseIp)
+    private void connectToMessageDatbase(String databaseIp)
     {
         CouchDbProperties properties = new CouchDbProperties()
             .setDbName("chatzilla_message-history")
