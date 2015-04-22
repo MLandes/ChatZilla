@@ -5,12 +5,24 @@
  */
 package zillacorp.server;
 
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 /**
  *
  * @author l.hurtz
  */
 public class ServerThread extends Thread implements Runnable
 {
+    DatabaseThread databaseThread;
+    ServerSocketHandlerThread serverSocketHandlerThread;
+    ArrayList<ClientSocketThread> clientSocketThreads;
+    
+    public ServerThread(String DatabaseIp)
+    {
+        
+    }
+    
     public void run()
     {
         //TODO
