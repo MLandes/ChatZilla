@@ -5,8 +5,10 @@
  */
 package zillacorp.server;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import zillacorp.model.Message;
 
 /**
  *
@@ -17,6 +19,10 @@ public class ServerThread extends Thread implements Runnable
     DatabaseThread databaseThread;
     ServerSocketHandlerThread serverSocketHandlerThread;
     ArrayList<ClientSocketThread> clientSocketThreads;
+    
+    ConcurrentLinkedQueue<Message> messagesFromClients;
+    ConcurrentLinkedQueue<Message> messagesFromDatabase;
+    ConcurrentLinkedQueue<Socket> newlyAcceptedClientSockets;
     
     public ServerThread(String DatabaseIp)
     {
