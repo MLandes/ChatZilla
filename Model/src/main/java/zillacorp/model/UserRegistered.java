@@ -9,7 +9,10 @@ package zillacorp.model;
  *
  * @author l.hurtz
  */
-public class UserRegistered {
+public class UserRegistered 
+{
+    public String _id;
+    public String _rev;
     public String nickname;
     public String password;
 }

@@ -11,7 +11,10 @@ import java.util.Date;
  *
  * @author l.hurtz
  */
-public class Message {
+public class Message 
+{
+    public String _id;
+    public String _rev;
     public String message;
     public Date serverTime;
     public String userNickname;

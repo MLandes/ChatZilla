@@ -9,6 +9,9 @@ package zillacorp.model;
  *
  * @author l.hurtz
  */
-public class UserOnline {
+public class UserOnline 
+{
+    public String _id;
+    public String _rev;
     public String nickname;   
 }
