@@ -9,10 +9,10 @@ package zillacorp.server;
  *
  * @author l.hurtz
  */
-public class ServerSocketHandlerThread extends Thread implements Runnable
-{    
+public class DatabaseThread extends Thread implements Runnable
+{
     public void run()
     {
         
-    }    
+    }
 }
