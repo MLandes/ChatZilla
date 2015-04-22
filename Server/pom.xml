@@ -16,5 +16,10 @@
             <artifactId>lightcouch</artifactId>
             <version>0.1.6</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
