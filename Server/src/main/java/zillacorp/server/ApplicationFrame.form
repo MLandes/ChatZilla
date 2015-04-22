@@ -83,16 +83,13 @@
           </StringArray>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DbIpComboBoxActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="VerbindenButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Verbinden"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="VerbindenButtonActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="VerbindenButtonClicked"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="StatusLabel">

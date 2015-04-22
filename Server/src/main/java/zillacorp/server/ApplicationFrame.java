@@ -11,6 +11,8 @@ package zillacorp.server;
  */
 public class ApplicationFrame extends javax.swing.JFrame {
 
+    ServerThread serverThread;
+    
     /**
      * Creates new form ApplicationFrame
      */
@@ -40,16 +42,11 @@ public class ApplicationFrame extends javax.swing.JFrame {
         DatenbankLabel.setText("Datenbank:");
 
         DbIpComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.53.124", "172.16.59.230" }));
-        DbIpComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DbIpComboBoxActionPerformed(evt);
-            }
-        });
 
         VerbindenButton.setText("Verbinden");
         VerbindenButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                VerbindenButtonActionPerformed(evt);
+                VerbindenButtonClicked(evt);
             }
         });
 
@@ -98,13 +95,10 @@ public class ApplicationFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void DbIpComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DbIpComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DbIpComboBoxActionPerformed
-
-    private void VerbindenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerbindenButtonActionPerformed
-         
-    }//GEN-LAST:event_VerbindenButtonActionPerformed
+    private void VerbindenButtonClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerbindenButtonClicked
+        serverThread = new ServerThread((String)DbIpComboBox.getSelectedItem());
+        serverThread.start();
+    }//GEN-LAST:event_VerbindenButtonClicked
 
     /**
      * @param args the command line arguments
