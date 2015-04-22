@@ -72,4 +72,9 @@ public class DatabaseThread extends Thread implements Runnable
         
         userOnlineDatabaseClient = new CouchDbClient(properties);
     }
+    
+    public void sendToDatabase(Message message)
+    {
+        messageDatabaseClient.save(message);
+    }
 }
