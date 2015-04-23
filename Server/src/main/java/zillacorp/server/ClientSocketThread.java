@@ -50,8 +50,8 @@ public class ClientSocketThread extends Thread implements Runnable
     
     public void sendMessageToClient(Message message)
     {
-        String serializesMessage = new Gson().toJson(message);
+        String serializedMessage = new Gson().toJson(message);
         
-        outputToClient.println(serializesMessage);
+        outputToClient.println(serializedMessage);
     }
 }
