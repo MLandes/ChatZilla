@@ -18,12 +18,14 @@ import zillacorp.model.Message;
  */
 public class ClientSocketThread extends Thread implements Runnable
 {
+    Socket clientSocket;
     Scanner inputFromClient;
     PrintWriter outputToClient;
     String userNickname;
     
     public ClientSocketThread(Socket clientSocket) throws IOException
     {
+        this.clientSocket = clientSocket;
         inputFromClient = new Scanner(clientSocket.getInputStream());
         outputToClient = new PrintWriter(clientSocket.getOutputStream());
         userNickname = inputFromClient.nextLine();
