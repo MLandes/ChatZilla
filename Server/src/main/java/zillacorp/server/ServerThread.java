@@ -17,7 +17,7 @@ import zillacorp.model.Message;
 public class ServerThread extends Thread implements Runnable
 {
     DatabaseMessageThread databaseThread;
-    ServerSocketHandlerThread serverSocketHandlerThread;
+    ServerSocketThread serverSocketHandlerThread;
     ArrayList<ClientSocketThread> clientSocketThreads;
     
     static ConcurrentLinkedQueue<Message> messagesFromClients;
