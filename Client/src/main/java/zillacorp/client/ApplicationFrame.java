@@ -45,6 +45,7 @@ public class ApplicationFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatZilla");
         setLocationByPlatform(true);
+        setMinimumSize(new java.awt.Dimension(400, 300));
 
         MessageHistoryTextPane.setEditable(false);
         MessageHistoryTextPane.setText("test");
@@ -101,9 +102,7 @@ public class ApplicationFrame extends javax.swing.JFrame {
                                     .addComponent(OnlineClientsLabel)
                                     .addComponent(TrennenButton))
                                 .addGap(24, 24, 24))))
-                    .addGroup(ChatRoomPanelLayout.createSequentialGroup()
-                        .addComponent(StatusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 697, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(StatusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE))
                 .addContainerGap())
         );
         ChatRoomPanelLayout.setVerticalGroup(

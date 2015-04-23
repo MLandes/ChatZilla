@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="title" type="java.lang.String" value="ChatZilla"/>
+    <Property name="locationByPlatform" type="boolean" value="true"/>
+    <Property name="resizable" type="boolean" value="false"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
+              <Component id="VerbindenButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="PasswortLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="BenutzerLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="ServerLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="21" pref="21" max="-2" attributes="0"/>
+                              <Component id="VerlaufanzeigeZeitraumComboBox" min="-2" pref="114" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="PasswortField" min="-2" pref="179" max="-2" attributes="0"/>
+                          <Component id="BenutzerField" min="-2" pref="179" max="-2" attributes="0"/>
+                          <Component id="VerlaufAnzeigenCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ServerComboBox" min="-2" pref="121" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="BenutzerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="BenutzerField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="PasswortLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="PasswortField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="VerlaufAnzeigenCheckBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="VerlaufanzeigeZeitraumComboBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ServerLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ServerComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="57" max="32767" attributes="0"/>
+              <Component id="VerbindenButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="BenutzerLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Benutzer:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="PasswortLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Passwort:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="BenutzerField">
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="PasswortField">
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="VerlaufAnzeigenCheckBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Verlauf anzeigen"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="VerlaufanzeigeZeitraumComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="5">
+            <StringItem index="0" value="heute"/>
+            <StringItem index="1" value="letzten 3 Tage"/>
+            <StringItem index="2" value="letzte Woche"/>
+            <StringItem index="3" value="letzten Monat"/>
+            <StringItem index="4" value="komplett"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <BindingProperties>
+        <BindingProperty name="enabled" source="VerlaufAnzeigenCheckBox" sourcePath="${selected}" target="VerlaufanzeigeZeitraumComboBox" targetPath="enabled" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="ServerLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Server:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="ServerComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="2">
+            <StringItem index="0" value="172.16.59.230"/>
+            <StringItem index="1" value="172.16.53.124"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="VerbindenButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Verbinden"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Anmeldung/Registrierung:"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>
