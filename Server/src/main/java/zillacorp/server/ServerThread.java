@@ -30,7 +30,11 @@ public class ServerThread extends Thread implements Runnable
         databaseThread.start();
         
         serverSocketThread = new ServerSocketThread();
-        serverSocketThread.start();        
+        serverSocketThread.start();
+        
+        messagesFromClients = new ConcurrentLinkedQueue<>();
+        messagesFromDatabase = new ConcurrentLinkedQueue<>();
+        newlyAcceptedClientSockets = new ConcurrentLinkedQueue<>();
     }
     
     public void run()
@@ -53,7 +57,7 @@ public class ServerThread extends Thread implements Runnable
             {
                 ClientSocketThread newClientSocketThread = new ClientSocketThread(clientSocket);
                 newClientSocketThread.start();
-                clientSocketThreads.add(new ClientSocketThread(clientSocket));                
+                clientSocketThreads.add(newClientSocketThread);                
             } catch (Exception e) 
             {
                 System.out.println("Fehler beim abgreifen des InputStreams des neuen Clients. CLient wurde abgelehnt.");
@@ -63,8 +67,7 @@ public class ServerThread extends Thread implements Runnable
                 } catch (Exception ex) 
                 {
                     System.out.println("Fehler beim abgreifen des InputStreams des neuen Clients. CLient wurde abgelehnt.");
-                }
-                
+                }                
             }            
         }
     }
