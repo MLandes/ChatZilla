@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.lightcouch.Changes;
-import org.lightcouch.ChangesResult;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
 import zillacorp.model.Message;
@@ -31,6 +30,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
         connectToMessageDatbase(databaseIp);
     }
     
+    @Override
     public void run()
     {
         Changes messageChangesFeed = getMessageChangesFeed();
