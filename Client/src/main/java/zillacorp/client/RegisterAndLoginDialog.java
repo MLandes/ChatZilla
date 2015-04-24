@@ -17,6 +17,8 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
     public RegisterAndLoginDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.getRootPane().setDefaultButton(VerbindenButton);
     }
 
     /**
@@ -38,15 +40,16 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         ServerLabel = new javax.swing.JLabel();
         ServerComboBox = new javax.swing.JComboBox();
         VerbindenButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        AnmeldungRegistrierungLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("ChatZilla");
-        setLocationByPlatform(true);
         setResizable(false);
 
+        BenutzerLabel.setLabelFor(BenutzerField);
         BenutzerLabel.setText("Benutzer:");
 
+        PasswortLabel.setLabelFor(PasswortField);
         PasswortLabel.setText("Passwort:");
 
         VerlaufAnzeigenCheckBox.setText("Verlauf anzeigen");
@@ -56,13 +59,20 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, VerlaufAnzeigenCheckBox, org.jdesktop.beansbinding.ELProperty.create("${selected}"), VerlaufanzeigeZeitraumComboBox, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
+        ServerLabel.setLabelFor(ServerComboBox);
         ServerLabel.setText("Server:");
 
         ServerComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.59.230", "172.16.53.124" }));
 
         VerbindenButton.setText("Verbinden");
+        VerbindenButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerbindenButtonActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setText("Anmeldung/Registrierung:");
+        AnmeldungRegistrierungLabel.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        AnmeldungRegistrierungLabel.setText("Anmeldung/Registrierung:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -89,14 +99,14 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
                             .addComponent(BenutzerField, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(VerlaufAnzeigenCheckBox)
                             .addComponent(ServerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel1))
+                    .addComponent(AnmeldungRegistrierungLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jLabel1)
+                .addComponent(AnmeldungRegistrierungLabel)
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BenutzerLabel)
@@ -123,49 +133,14 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegisterAndLoginDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegisterAndLoginDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegisterAndLoginDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegisterAndLoginDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                RegisterAndLoginDialog dialog = new RegisterAndLoginDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    private void VerbindenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerbindenButtonActionPerformed
+        Application.ApplicationFrame = new ApplicationFrame();
+        this.setVisible(false);
+        Application.ApplicationFrame.setVisible(true);
+    }//GEN-LAST:event_VerbindenButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel AnmeldungRegistrierungLabel;
     private javax.swing.JTextField BenutzerField;
     private javax.swing.JLabel BenutzerLabel;
     private javax.swing.JPasswordField PasswortField;
@@ -175,7 +150,6 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
     private javax.swing.JButton VerbindenButton;
     private javax.swing.JCheckBox VerlaufAnzeigenCheckBox;
     private javax.swing.JComboBox VerlaufanzeigeZeitraumComboBox;
-    private javax.swing.JLabel jLabel1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
