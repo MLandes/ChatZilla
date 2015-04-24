@@ -9,12 +9,12 @@ package zillacorp.client;
  *
  * @author Martin
  */
-public class ApplicationFrame extends javax.swing.JFrame {
+public class ChatFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form ApplicationFrame
      */
-    public ApplicationFrame() {
+    public ChatFrame() {
         initComponents();
         
         this.MessageTextField.requestFocus();

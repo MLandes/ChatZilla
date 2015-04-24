@@ -44,6 +44,7 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("ChatZilla");
+        setLocationByPlatform(true);
         setResizable(false);
 
         BenutzerLabel.setLabelFor(BenutzerField);
@@ -134,9 +135,9 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void VerbindenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerbindenButtonActionPerformed
-        Application.ApplicationFrame = new ApplicationFrame();
+        Application.ChatFrame = new ChatFrame();
         this.setVisible(false);
-        Application.ApplicationFrame.setVisible(true);
+        Application.ChatFrame.setVisible(true);
     }//GEN-LAST:event_VerbindenButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

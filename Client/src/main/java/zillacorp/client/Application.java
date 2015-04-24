@@ -12,7 +12,7 @@ package zillacorp.client;
 public class Application {
 
     public static RegisterAndLoginDialog RegisterAndLoginDialog;
-    public static ApplicationFrame ApplicationFrame;
+    public static ChatFrame ChatFrame;
     
     /**
      * @param args the command line arguments
