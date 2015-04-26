@@ -141,7 +141,8 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         Application.SocketThread = new SocketThread();
         Application.SocketThread.start();
         
-        Application.ChatFrame = new ChatFrame();
+        String serverIp = this.ServerComboBox.getSelectedItem().toString();
+        Application.ChatFrame = new ChatFrame(serverIp);
         this.setVisible(false);
         Application.ChatFrame.setVisible(true);
     }//GEN-LAST:event_VerbindenButtonActionPerformed

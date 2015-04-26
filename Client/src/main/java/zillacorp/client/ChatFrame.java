@@ -14,9 +14,10 @@ public class ChatFrame extends javax.swing.JFrame {
     /**
      * Creates new form ApplicationFrame
      */
-    public ChatFrame() {
+    public ChatFrame(String serverIp) {
         initComponents();
         
+        this.StatusLabel.setText("Verbunden mit: " + serverIp);
         this.MessageTextField.requestFocus();
         this.getRootPane().setDefaultButton(SendenButton);
     }
@@ -148,9 +149,9 @@ public class ChatFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void SendenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendenButtonActionPerformed
-        if ( !MessageTextField.getText().equals("") ) {
-            MessageHistoryTextPane.setText(MessageHistoryTextPane.getText() + "\n" + MessageTextField.getText());
-            MessageTextField.setText("");
+        if ( !this.MessageTextField.getText().equals("") ) {
+            this.MessageHistoryTextPane.setText(this.MessageHistoryTextPane.getText() + "\n" + this.MessageTextField.getText());
+            this.MessageTextField.setText("");
         }
     }//GEN-LAST:event_SendenButtonActionPerformed
 
