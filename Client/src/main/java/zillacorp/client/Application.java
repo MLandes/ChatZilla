@@ -45,13 +45,7 @@ public class Application {
             public void run() {
                 
                 /* Create and display the dialog */
-                Application.RegisterAndLoginDialog = new RegisterAndLoginDialog(new javax.swing.JFrame(), true);
-                RegisterAndLoginDialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
+                Application.RegisterAndLoginDialog = new RegisterAndLoginDialog();
                 RegisterAndLoginDialog.setVisible(true);
                 
             }

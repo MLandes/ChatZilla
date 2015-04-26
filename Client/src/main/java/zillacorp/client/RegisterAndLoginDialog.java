@@ -5,6 +5,8 @@
  */
 package zillacorp.client;
 
+import java.awt.Dialog;
+
 /**
  *
  * @author Martin
@@ -14,10 +16,11 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
     /**
      * Creates new form RegisterAndLoginDialog
      */
-    public RegisterAndLoginDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public RegisterAndLoginDialog() {
+        super((Dialog)null, false);
         initComponents();
         
+        this.setDefaultCloseOperationTo_Exit_On_Close();
         this.getRootPane().setDefaultButton(VerbindenButton);
     }
 
@@ -153,4 +156,13 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox VerlaufanzeigeZeitraumComboBox;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    private void setDefaultCloseOperationTo_Exit_On_Close() {
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                System.exit(0);
+            }
+        });
+    }
 }
