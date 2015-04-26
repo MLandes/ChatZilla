@@ -138,6 +138,9 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void VerbindenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerbindenButtonActionPerformed
+        Application.SocketThread = new SocketThread();
+        Application.SocketThread.start();
+        
         Application.ChatFrame = new ChatFrame();
         this.setVisible(false);
         Application.ChatFrame.setVisible(true);

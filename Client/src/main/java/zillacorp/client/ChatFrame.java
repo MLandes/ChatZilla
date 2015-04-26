@@ -156,6 +156,7 @@ public class ChatFrame extends javax.swing.JFrame {
 
     private void TrennenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TrennenButtonActionPerformed
         this.dispose();
+        Application.SocketThread.terminate();
         Application.RegisterAndLoginDialog.setVisible(true);
     }//GEN-LAST:event_TrennenButtonActionPerformed
 

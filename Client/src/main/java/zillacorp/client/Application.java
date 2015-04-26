@@ -13,6 +13,7 @@ public class Application {
 
     public static RegisterAndLoginDialog RegisterAndLoginDialog;
     public static ChatFrame ChatFrame;
+    public static SocketThread SocketThread;
     
     /**
      * @param args the command line arguments
@@ -46,8 +47,7 @@ public class Application {
                 
                 /* Create and display the dialog */
                 Application.RegisterAndLoginDialog = new RegisterAndLoginDialog();
-                RegisterAndLoginDialog.setVisible(true);
-                
+                Application.RegisterAndLoginDialog.setVisible(true);
             }
         });
     }
