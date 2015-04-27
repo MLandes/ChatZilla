@@ -6,7 +6,6 @@
 package zillacorp.client;
 
 import java.awt.Dialog;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 
@@ -27,6 +26,7 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         this.getRootPane().setDefaultButton(VerbindenButton);
     }
 
+    
     public String getUserName() {
         return this.BenutzerField.getText();
     }
@@ -35,13 +35,13 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         return this.PasswortField.getPassword().toString();
     }
     
-    
     public boolean isMessageHistoryRequested() {
         return this.VerlaufAnzeigenCheckBox.isSelected();
     }
+    
     public long getTimestampForBeginningMessageHistory() {
         long result = 0;
-        Calendar currentTime = Calendar.getInstance();  // aktuelle Zeit
+        Calendar currentTime = Calendar.getInstance(); //aktuelle Zeit
         if (this.VerlaufAnzeigenCheckBox.isSelected()) {
             int comboBoxIndex = this.VerlaufanzeigeZeitraumComboBox.getSelectedIndex();
             if (comboBoxIndex == 0) {
@@ -66,6 +66,7 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
     public String getServerIp() {
         return this.ServerComboBox.getSelectedItem().toString();
     }
+    
     
     private void setDefaultCloseOperationTo_Exit_On_Close() {
         this.addWindowListener(new java.awt.event.WindowAdapter() {

@@ -19,6 +19,7 @@ public class ChatFrame extends javax.swing.JFrame {
 
     private DefaultListModel<String> onlineClientsListModel = new DefaultListModel<>();
     
+    
     /**
      * Creates new form ApplicationFrame
      */
@@ -32,6 +33,7 @@ public class ChatFrame extends javax.swing.JFrame {
         this.getRootPane().setDefaultButton(SendenButton);
     }
 
+    
     public void UpdateMessageHistory(LinkedList<Message> newMessages) {
         for (Message item : newMessages) {
             this.UpdateMessageHistory(item);

@@ -15,6 +15,7 @@ public class Application {
     public static ChatFrame ChatFrame;
     public static SocketThread SocketThread;
     
+    
     /**
      * @param args the command line arguments
      */
