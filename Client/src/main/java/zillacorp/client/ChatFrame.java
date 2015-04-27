@@ -5,23 +5,72 @@
  */
 package zillacorp.client;
 
+import java.util.Date;
+import java.util.LinkedList;
+import javax.swing.DefaultListModel;
+import zillacorp.model.Message;
+import zillacorp.model.UserOnline;
+
 /**
  *
  * @author Martin
  */
 public class ChatFrame extends javax.swing.JFrame {
 
+    private DefaultListModel<String> onlineClientsListModel = new DefaultListModel<>();
+    
     /**
      * Creates new form ApplicationFrame
      */
-    public ChatFrame(String serverIp) {
+    public ChatFrame() {
         initComponents();
         
-        this.StatusLabel.setText("Verbunden mit: " + serverIp);
+        this.MessageHistoryTextPane.setText("Willkommen bei ChatZilla, " + Application.RegisterAndLoginDialog.getUserName() + "!\n");
+        this.AddOnlineClientToList(Application.RegisterAndLoginDialog.getUserName());
+        this.StatusLabel.setText("Verbunden mit: " + Application.RegisterAndLoginDialog.getServerIp());
         this.MessageTextField.requestFocus();
         this.getRootPane().setDefaultButton(SendenButton);
     }
 
+    public void UpdateMessageHistory(LinkedList<Message> newMessages) {
+        for (Message item : newMessages) {
+            this.UpdateMessageHistory(item);
+        }
+    }
+    public void UpdateMessageHistory(Message newMessage) {
+        String oldMessageHistoryEntries = this.MessageHistoryTextPane.getText();
+        String newMessageHistoryEntry = new String();
+        Date newMessage_date = new Date(newMessage.serverTimeStamp);
+        newMessageHistoryEntry = newMessageHistoryEntry
+                + newMessage_date.toString() + " - " + newMessage.userNickname + ":\n"
+                + newMessage.messageText + "\n";
+        this.MessageHistoryTextPane.setText(oldMessageHistoryEntries + newMessageHistoryEntry);
+    }
+    
+    public void UpdateServerIp(String serverIp) {
+        this.StatusLabel.setText("Verbunden mit: " + serverIp);
+    }
+    
+    public void AddOnlineClientsToList(LinkedList<UserOnline> newClients) {
+        for (UserOnline item : newClients) {
+            this.AddOnlineClientToList(item.nickname);
+        }
+    }
+    public void AddOnlineClientToList(String newClient) {
+        this.onlineClientsListModel.addElement(newClient);
+        this.OnlineClientsList.setModel(this.onlineClientsListModel);
+    }
+    
+    public void RemoveOnlineClientsFromList(LinkedList<UserOnline> leftClients) {
+        for (UserOnline item : leftClients) {
+            this.RemoveOnlineClientFromList(item.nickname);
+        }
+    }
+    public void RemoveOnlineClientFromList(String leftClient) {
+        this.onlineClientsListModel.removeElement(leftClient);
+        this.OnlineClientsList.setModel(this.onlineClientsListModel);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,7 +99,6 @@ public class ChatFrame extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(400, 300));
 
         MessageHistoryTextPane.setEditable(false);
-        MessageHistoryTextPane.setText("test");
         MessageHistoryScrollPane.setViewportView(MessageHistoryTextPane);
 
         TrennenButton.setText("Trennen");
@@ -63,11 +111,6 @@ public class ChatFrame extends javax.swing.JFrame {
             }
         });
 
-        OnlineClientsList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Du", "User 2", "User 3", "User 4", "User 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         OnlineClientsScrollPane.setViewportView(OnlineClientsList);
 
         OnlineClientsLabel.setLabelFor(OnlineClientsList);
@@ -150,14 +193,19 @@ public class ChatFrame extends javax.swing.JFrame {
 
     private void SendenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendenButtonActionPerformed
         if ( !this.MessageTextField.getText().equals("") ) {
-            this.MessageHistoryTextPane.setText(this.MessageHistoryTextPane.getText() + "\n" + this.MessageTextField.getText());
+            Message sentMessage = new Message();
+            sentMessage.messageText = this.MessageTextField.getText();
+            sentMessage.userNickname = Application.RegisterAndLoginDialog.getUserName();
+            Application.SocketThread.OutgoingMessages.offer(sentMessage);
             this.MessageTextField.setText("");
         }
     }//GEN-LAST:event_SendenButtonActionPerformed
 
     private void TrennenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TrennenButtonActionPerformed
+        //Reihenfolge beachten!
         this.dispose();
         Application.SocketThread.terminate();
+        Application.SocketThread.closeSocketConnection();
         Application.RegisterAndLoginDialog.setVisible(true);
     }//GEN-LAST:event_TrennenButtonActionPerformed
 

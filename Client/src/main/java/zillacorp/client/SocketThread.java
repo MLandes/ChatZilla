@@ -5,8 +5,14 @@
  */
 package zillacorp.client;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
+import zillacorp.model.Message;
 
 /**
  *
@@ -15,36 +21,83 @@ import java.util.logging.Logger;
 public class SocketThread implements Runnable {
     
     private Thread baseThread;
-    private volatile boolean isRunning;
+    private volatile boolean isThreadRunning;
+    private Socket clientSocket;
+    
+    public ConcurrentLinkedQueue<Message> OutgoingMessages = new ConcurrentLinkedQueue<>();
+    
+    public boolean tryConnectToServerSocket() {
+        try {
+            String serverIp = Application.RegisterAndLoginDialog.getServerIp();
+            this.clientSocket = new Socket(serverIp, 4321);
+            return true;
+        } catch (IOException ex) {
+            return false;
+        }
+    }
+    public void closeSocketConnection() {
+        try {
+            this.clientSocket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public void run() {
+        this.handleAuthentification();
+        this.handleMessageHistory();
+        while(this.isThreadRunning && !clientSocket.isClosed()) {
+            this.handleOnlineClients();
+            this.handleIncomingMessages();
+            this.handleOutgoingMessages();
+        }
+        if (this.isThreadRunning && clientSocket.isClosed() && Application.ChatFrame.isVisible()) {
+            JOptionPane.showMessageDialog(
+                    Application.ChatFrame,
+                    "Die Verbindung zum Server ist abgebrochen.\nSie können Trennen klicken und versuchen neu zu verbinden!",
+                    "Connection Problem",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    private void handleAuthentification() {
+        
+    }
+    private void handleMessageHistory() {
+        if (Application.RegisterAndLoginDialog.isMessageHistoryRequested()) {
+            //Application.RegisterAndLoginDialog.getTimestampForBeginningMessageHistory();
+        }
+    }
+    private void handleOnlineClients() {
+        
+    }
+    private void handleIncomingMessages() {
+        
+    }
+    private void handleOutgoingMessages() {
+        if (!this.OutgoingMessages.isEmpty()) {
+            Message SentMessage = this.OutgoingMessages.poll();
+        }
+    }
     
     public void start() {
         if (this.baseThread == null) {
             this.baseThread = new Thread(this);
-            this.isRunning = true;
+            this.isThreadRunning = true;
             this.baseThread.start();
         }
     }
     public void terminate() {
         if (this.baseThread != null) {
             try {
-                this.isRunning = false;
+                this.isThreadRunning = false;
                 this.baseThread.join();
                 // Alternative: this.baseThread.interrupt();
             } catch (InterruptedException ex) {
                 Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 this.baseThread = null;
-            }
-        }
-    }
-    
-    @Override
-    public void run() {
-        while(this.isRunning) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(SocketThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

@@ -126,7 +126,6 @@
                 <Component class="javax.swing.JTextPane" name="MessageHistoryTextPane">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
-                    <Property name="text" type="java.lang.String" value="test"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -152,13 +151,7 @@
                 <Component class="javax.swing.JList" name="OnlineClientsList">
                   <Properties>
                     <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                      <StringArray count="5">
-                        <StringItem index="0" value="Du"/>
-                        <StringItem index="1" value="User 2"/>
-                        <StringItem index="2" value="User 3"/>
-                        <StringItem index="3" value="User 4"/>
-                        <StringItem index="4" value="User 5"/>
-                      </StringArray>
+                      <StringArray count="0"/>
                     </Property>
                   </Properties>
                 </Component>

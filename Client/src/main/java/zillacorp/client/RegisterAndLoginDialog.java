@@ -6,6 +6,9 @@
 package zillacorp.client;
 
 import java.awt.Dialog;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,6 +27,55 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         this.getRootPane().setDefaultButton(VerbindenButton);
     }
 
+    public String getUserName() {
+        return this.BenutzerField.getText();
+    }
+    
+    public String getPassword() {
+        return this.PasswortField.getPassword().toString();
+    }
+    
+    
+    public boolean isMessageHistoryRequested() {
+        return this.VerlaufAnzeigenCheckBox.isSelected();
+    }
+    public long getTimestampForBeginningMessageHistory() {
+        long result = 0;
+        Calendar currentTime = Calendar.getInstance();  // aktuelle Zeit
+        if (this.VerlaufAnzeigenCheckBox.isSelected()) {
+            int comboBoxIndex = this.VerlaufanzeigeZeitraumComboBox.getSelectedIndex();
+            if (comboBoxIndex == 0) {
+                currentTime.add(Calendar.DATE, -1);
+                result = currentTime.getTimeInMillis();
+            } else if (comboBoxIndex == 1) {
+                currentTime.add(Calendar.DATE, -3);
+                result = currentTime.getTimeInMillis();
+            } else if (comboBoxIndex == 2) {
+                currentTime.add(Calendar.DATE, -7);
+                result = currentTime.getTimeInMillis();
+            } else if (comboBoxIndex == 3) {
+                currentTime.add(Calendar.MONTH, -1);
+                result = currentTime.getTimeInMillis();
+            } else if (comboBoxIndex == 4) {
+                result = 1;
+            }
+        } 
+        return result;
+    }
+    
+    public String getServerIp() {
+        return this.ServerComboBox.getSelectedItem().toString();
+    }
+    
+    private void setDefaultCloseOperationTo_Exit_On_Close() {
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                System.exit(0);
+            }
+        });
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,6 +107,8 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
 
         PasswortLabel.setLabelFor(PasswortField);
         PasswortLabel.setText("Passwort:");
+
+        PasswortField.setEnabled(false);
 
         VerlaufAnzeigenCheckBox.setText("Verlauf anzeigen");
 
@@ -139,12 +193,18 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
 
     private void VerbindenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerbindenButtonActionPerformed
         Application.SocketThread = new SocketThread();
-        Application.SocketThread.start();
-        
-        String serverIp = this.ServerComboBox.getSelectedItem().toString();
-        Application.ChatFrame = new ChatFrame(serverIp);
-        this.setVisible(false);
-        Application.ChatFrame.setVisible(true);
+        if ( Application.SocketThread.tryConnectToServerSocket() ) {
+            Application.ChatFrame = new ChatFrame();
+            Application.SocketThread.start();
+            this.setVisible(false);
+            Application.ChatFrame.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(
+                    Application.RegisterAndLoginDialog,
+                    "Server ist nicht erreichbar.\nBitte wählen Sie einen anderen aus!",
+                    "Connection Problem",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_VerbindenButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -160,13 +220,4 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox VerlaufanzeigeZeitraumComboBox;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
-
-    private void setDefaultCloseOperationTo_Exit_On_Close() {
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);
-            }
-        });
-    }
 }

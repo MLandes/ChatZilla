@@ -41,7 +41,7 @@ public class ClientSocketThread extends Thread implements Runnable
             
             newMessageText = inputFromClient.nextLine();  
             
-            newMessage.message = newMessageText;
+            newMessage.messageText = newMessageText;
             newMessage.userNickname = userNickname;
             
             ServerThread.messagesFromClients.add(newMessage);
