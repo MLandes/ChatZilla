@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 public class ServerSocketThread extends Thread implements Runnable
 {    
     ServerSocket serverSocket;
+    public boolean isAllowedToRun = true;
     
     public boolean TryCreateServerSocket()
     {
@@ -33,7 +34,7 @@ public class ServerSocketThread extends Thread implements Runnable
     @Override
     public void run()
     {
-        while (true)
+        while (isAllowedToRun && !serverSocket.isClosed())
         {
             try 
             {
