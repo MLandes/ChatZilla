@@ -5,9 +5,12 @@
  */
 package zillacorp.server;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import zillacorp.dbModel.Message;
 
@@ -95,7 +98,11 @@ public class ServerThread extends Thread implements Runnable
             }
             else
             {
-                clientSocket.close();
+                try {
+                    clientSocket.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 newClientSocketThread.interrupt();
             }      
         }
