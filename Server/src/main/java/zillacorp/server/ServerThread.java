@@ -32,6 +32,8 @@ public class ServerThread extends Thread implements Runnable
         serverSocketThread = new ServerSocketThread();
         serverSocketThread.start();
         
+        clientSocketThreads = new ArrayList<>();
+        
         messagesFromClients = new ConcurrentLinkedQueue<>();
         messagesFromDatabase = new ConcurrentLinkedQueue<>();
         newlyAcceptedClientSockets = new ConcurrentLinkedQueue<>();
