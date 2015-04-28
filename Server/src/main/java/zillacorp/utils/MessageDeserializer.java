@@ -6,7 +6,7 @@
 package zillacorp.utils;
 
 import com.google.gson.Gson;
-import zillacorp.model.Message;
+import zillacorp.dbModel.Message;
 
 /**
  *

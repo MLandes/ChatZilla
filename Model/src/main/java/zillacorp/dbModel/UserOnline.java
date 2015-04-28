@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package zillacorp.model;
+package zillacorp.dbModel;
 
 /**
  *
  * @author l.hurtz
  */
-public class UserRegistered 
+public class UserOnline 
 {
     public String _id;
     public String _rev;
-    public String nickname;
-    public String password;
+    public String nickname;   
 }

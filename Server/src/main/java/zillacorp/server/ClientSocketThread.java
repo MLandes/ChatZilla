@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import zillacorp.model.Message;
+import zillacorp.dbModel.Message;
 import zillacorp.utils.MessageDeserializer;
 
 /**
@@ -49,12 +49,10 @@ public class ClientSocketThread extends Thread implements Runnable
     {
         String newMessageAsJson;
         while(true)
-        {
-            Message newMessage = new Message();
-            
+        {            
             newMessageAsJson = inputFromClient.nextLine();  
             
-            newMessage = MessageDeserializer.deserializeMessage(newMessageAsJson);
+            Message newMessage = MessageDeserializer.deserializeMessage(newMessageAsJson);
             
             ServerThread.messagesFromClients.add(newMessage);
         }

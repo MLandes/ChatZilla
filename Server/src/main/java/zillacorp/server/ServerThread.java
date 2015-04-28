@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.swing.JOptionPane;
-import zillacorp.model.Message;
+import zillacorp.dbModel.Message;
 
 /**
  *

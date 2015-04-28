@@ -6,7 +6,7 @@
 package zillacorp.utils;
 
 import java.util.Comparator;
-import zillacorp.model.Message;
+import zillacorp.dbModel.Message;
 
 /**
  *

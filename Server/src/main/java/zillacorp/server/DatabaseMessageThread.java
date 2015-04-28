@@ -14,7 +14,7 @@ import java.util.List;
 import org.lightcouch.Changes;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
-import zillacorp.model.Message;
+import zillacorp.dbModel.Message;
 import zillacorp.utils.MessageDeserializer;
 import zillacorp.utils.MessageSorter;
 
