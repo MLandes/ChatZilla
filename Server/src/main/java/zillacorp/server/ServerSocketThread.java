@@ -6,7 +6,6 @@
 package zillacorp.server;
 
 import java.awt.Frame;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import javax.swing.JOptionPane;
@@ -19,17 +18,16 @@ public class ServerSocketThread extends Thread implements Runnable
 {    
     ServerSocket serverSocket;
     
-    public ServerSocketThread()
+    public boolean TryCreateServerSocket()
     {
         try 
         {
             serverSocket = new ServerSocket(4321);
+            return true;
         } catch (Exception e)
         {
-            System.out.println("Fehler beim Erstellen des Server Sockets");
-            JOptionPane.showMessageDialog(new Frame(), "Fehler beim Erstellen des ServerSockets! Bitte Programm neu starten!", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
-        
     }
     
     @Override

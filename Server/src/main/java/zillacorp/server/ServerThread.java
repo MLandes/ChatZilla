@@ -8,6 +8,7 @@ package zillacorp.server;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import javax.swing.JOptionPane;
 import zillacorp.model.Message;
 
 /**
@@ -16,6 +17,8 @@ import zillacorp.model.Message;
  */
 public class ServerThread extends Thread implements Runnable
 {
+    ApplicationFrame applicationFrame;
+    
     DatabaseMessageThread databaseThread;
     ServerSocketThread serverSocketThread;
     ArrayList<ClientSocketThread> clientSocketThreads;
@@ -24,19 +27,46 @@ public class ServerThread extends Thread implements Runnable
     static ConcurrentLinkedQueue<Message> messagesFromDatabase;
     static ConcurrentLinkedQueue<Socket> newlyAcceptedClientSockets;
     
-    public ServerThread(String databaseIp)
+    public ServerThread(ApplicationFrame applicationFrame)
     {
-        databaseThread = new DatabaseMessageThread(databaseIp);
-        databaseThread.start();
+        this.applicationFrame = applicationFrame;
         
-        serverSocketThread = new ServerSocketThread();
-        serverSocketThread.start();
-        
+        databaseThread = new DatabaseMessageThread();        
+        serverSocketThread = new ServerSocketThread();        
         clientSocketThreads = new ArrayList<>();
         
         messagesFromClients = new ConcurrentLinkedQueue<>();
         messagesFromDatabase = new ConcurrentLinkedQueue<>();
         newlyAcceptedClientSockets = new ConcurrentLinkedQueue<>();
+    }
+    
+    public boolean tryInitializeDatabaseConnectionAndServerSocket(String databaseIp)
+    {
+        if (!databaseThread.tryConnectToMessageDatbase(databaseIp))
+        {
+            JOptionPane.showMessageDialog(applicationFrame,
+                    "Datenbank nicht erreichbar. Bitte trennen und erneut verbinden.", 
+                    "Database Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            
+            return false;
+        }
+        databaseThread.start();
+        
+        serverSocketThread = new ServerSocketThread();
+        if (!serverSocketThread.TryCreateServerSocket())
+        {
+            JOptionPane.showMessageDialog(applicationFrame,
+                    "Server Socket konnte nicht erstellt werden. Bitte trennen und erneut verbinden.", 
+                    "Server Socket Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            
+            databaseThread.interrupt();
+            return false;
+        }
+        serverSocketThread.start();
+        
+        return true;
     }
     
     public void run()

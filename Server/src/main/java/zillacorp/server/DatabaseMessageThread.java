@@ -5,14 +5,12 @@
  */
 package zillacorp.server;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import javax.print.attribute.standard.DateTimeAtCompleted;
 import org.lightcouch.Changes;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
@@ -27,12 +25,6 @@ import zillacorp.utils.MessageSorter;
 public class DatabaseMessageThread extends Thread implements Runnable
 {
     CouchDbClient messageDatabaseClient;
-    
-    
-    public DatabaseMessageThread(String databaseIp)
-    {
-        connectToMessageDatbase(databaseIp);
-    }
     
     @Override
     public void run()
@@ -79,7 +71,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
                 .continuousChanges();
     }    
 
-    private void connectToMessageDatbase(String databaseIp)
+    public boolean tryConnectToMessageDatbase(String databaseIp)
     {
         CouchDbProperties properties = new CouchDbProperties()
             .setDbName("chatzilla_message-history")
@@ -89,8 +81,16 @@ public class DatabaseMessageThread extends Thread implements Runnable
             .setPort(5984)
             .setMaxConnections(100)
             .setConnectionTimeout(0);
+        try
+        {
+            messageDatabaseClient = new CouchDbClient(properties);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
         
-        messageDatabaseClient = new CouchDbClient(properties);
     }
     
     private List<JsonObject> getAllMessageDocumentsFromDatabase()
