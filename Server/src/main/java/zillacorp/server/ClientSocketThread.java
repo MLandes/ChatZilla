@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import zillacorp.model.Message;
+import zillacorp.dbModel.Message;
+import zillacorp.utils.MessageDeserializer;
 
 /**
  *
@@ -21,28 +22,37 @@ public class ClientSocketThread extends Thread implements Runnable
     Socket clientSocket;
     Scanner inputFromClient;
     PrintWriter outputToClient;
-    String userNickname;
     
-    public ClientSocketThread(Socket clientSocket) throws IOException
+    public ClientSocketThread(Socket clientSocket)
     {
+        this.setName("ClientSocketThread");
+        
         this.clientSocket = clientSocket;
-        inputFromClient = new Scanner(clientSocket.getInputStream());
-        outputToClient = new PrintWriter(clientSocket.getOutputStream());
-        userNickname = inputFromClient.nextLine();
+    }
+    
+    public boolean retrieveStreamsFromClients()
+    {
+        try 
+        {
+            inputFromClient = new Scanner(clientSocket.getInputStream());
+            outputToClient = new PrintWriter(clientSocket.getOutputStream());     
+            return true;
+        } catch (Exception e) 
+        {
+            return false;
+        }
+        
     }
     
     @Override
     public void run()
     {
-        String newMessageText;
+        String newMessageAsJson;
         while(true)
-        {
-            Message newMessage = new Message();
+        {            
+            newMessageAsJson = inputFromClient.nextLine();  
             
-            newMessageText = inputFromClient.nextLine();  
-            
-            newMessage.messageText = newMessageText;
-            newMessage.userNickname = userNickname;
+            Message newMessage = MessageDeserializer.deserializeMessage(newMessageAsJson);
             
             ServerThread.messagesFromClients.add(newMessage);
         }

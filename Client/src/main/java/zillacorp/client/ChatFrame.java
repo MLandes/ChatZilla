@@ -8,8 +8,8 @@ package zillacorp.client;
 import java.util.Date;
 import java.util.LinkedList;
 import javax.swing.DefaultListModel;
-import zillacorp.model.Message;
-import zillacorp.model.UserOnline;
+import zillacorp.dbModel.Message;
+import zillacorp.dbModel.UserOnline;
 
 /**
  *

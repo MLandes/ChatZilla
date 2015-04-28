@@ -96,8 +96,17 @@ public class ApplicationFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void VerbindenButtonClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerbindenButtonClicked
-        serverThread = new ServerThread((String)DbIpComboBox.getSelectedItem());
-        serverThread.start();
+        serverThread = new ServerThread(this);
+        
+        String databaseIp = (String)DbIpComboBox.getSelectedItem();
+        if (serverThread.tryInitializeDatabaseConnectionAndServerSocket(databaseIp))
+        {
+            serverThread.start();
+        }
+        else
+        {
+            serverThread = null;
+        }        
     }//GEN-LAST:event_VerbindenButtonClicked
 
     /**

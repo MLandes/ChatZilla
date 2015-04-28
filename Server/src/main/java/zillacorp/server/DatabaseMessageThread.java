@@ -5,15 +5,17 @@
  */
 package zillacorp.server;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import org.lightcouch.Changes;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
-import zillacorp.model.Message;
+import zillacorp.dbModel.Message;
+import zillacorp.utils.MessageDeserializer;
 import zillacorp.utils.MessageSorter;
 
 /**
@@ -24,10 +26,9 @@ public class DatabaseMessageThread extends Thread implements Runnable
 {
     CouchDbClient messageDatabaseClient;
     
-    
-    public DatabaseMessageThread(String databaseIp)
+    public DatabaseMessageThread()
     {
-        connectToMessageDatbase(databaseIp);
+        this.setName("DatabaseMessageThread");
     }
     
     @Override
@@ -40,7 +41,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
             if(messageChangesFeed.next() != null)
             {
                 JsonObject serializedMessage = messageChangesFeed.next().getDoc().getAsJsonObject();
-                Message message = deserializeMessage(serializedMessage);
+                Message message = MessageDeserializer.deserializeMessage(serializedMessage.getAsString());
                 ServerThread.messagesFromDatabase.add(message);
             }
         }
@@ -48,6 +49,8 @@ public class DatabaseMessageThread extends Thread implements Runnable
     
     public void sendToDatabase(Message message)
     {
+        message.serverTimeStamp = Date.from(Instant.now()).getTime();
+        
         messageDatabaseClient.save(message);
     }
     
@@ -73,7 +76,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
                 .continuousChanges();
     }    
 
-    private void connectToMessageDatbase(String databaseIp)
+    public boolean tryConnectToMessageDatbase(String databaseIp)
     {
         CouchDbProperties properties = new CouchDbProperties()
             .setDbName("chatzilla_message-history")
@@ -83,14 +86,16 @@ public class DatabaseMessageThread extends Thread implements Runnable
             .setPort(5984)
             .setMaxConnections(100)
             .setConnectionTimeout(0);
+        try
+        {
+            messageDatabaseClient = new CouchDbClient(properties);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
         
-        messageDatabaseClient = new CouchDbClient(properties);
-    }
-    
-    private Message deserializeMessage(JsonObject serializedMessage) {
-        Gson gson = messageDatabaseClient.getGson();
-        
-        return gson.fromJson(serializedMessage, Message.class);
     }
     
     private List<JsonObject> getAllMessageDocumentsFromDatabase()
@@ -106,7 +111,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
         
         for(JsonObject document : allDocuments)
         {
-            Message messageFromDocument = deserializeMessage(document);
+            Message messageFromDocument = MessageDeserializer.deserializeMessage(document.getAsString());
             if (messageFromDocument.serverTimeStamp >= sinceTimeStamp)
             {
                 history.add(messageFromDocument);

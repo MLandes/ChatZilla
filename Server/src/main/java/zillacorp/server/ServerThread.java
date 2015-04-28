@@ -8,7 +8,8 @@ package zillacorp.server;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import zillacorp.model.Message;
+import javax.swing.JOptionPane;
+import zillacorp.dbModel.Message;
 
 /**
  *
@@ -16,6 +17,8 @@ import zillacorp.model.Message;
  */
 public class ServerThread extends Thread implements Runnable
 {
+    ApplicationFrame applicationFrame;
+    
     DatabaseMessageThread databaseThread;
     ServerSocketThread serverSocketThread;
     ArrayList<ClientSocketThread> clientSocketThreads;
@@ -24,17 +27,47 @@ public class ServerThread extends Thread implements Runnable
     static ConcurrentLinkedQueue<Message> messagesFromDatabase;
     static ConcurrentLinkedQueue<Socket> newlyAcceptedClientSockets;
     
-    public ServerThread(String databaseIp)
+    public ServerThread(ApplicationFrame applicationFrame)
     {
-        databaseThread = new DatabaseMessageThread(databaseIp);
-        databaseThread.start();
+        this.setName("ServerThread");
+        this.applicationFrame = applicationFrame;
         
-        serverSocketThread = new ServerSocketThread();
-        serverSocketThread.start();
+        databaseThread = new DatabaseMessageThread();        
+        serverSocketThread = new ServerSocketThread();        
+        clientSocketThreads = new ArrayList<>();
         
         messagesFromClients = new ConcurrentLinkedQueue<>();
         messagesFromDatabase = new ConcurrentLinkedQueue<>();
         newlyAcceptedClientSockets = new ConcurrentLinkedQueue<>();
+    }
+    
+    public boolean tryInitializeDatabaseConnectionAndServerSocket(String databaseIp)
+    {
+        if (!databaseThread.tryConnectToMessageDatbase(databaseIp))
+        {
+            JOptionPane.showMessageDialog(applicationFrame,
+                    "Datenbank nicht erreichbar. Bitte trennen und erneut verbinden.", 
+                    "Database Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            
+            return false;
+        }
+        databaseThread.start();
+        
+        serverSocketThread = new ServerSocketThread();
+        if (!serverSocketThread.TryCreateServerSocket())
+        {
+            JOptionPane.showMessageDialog(applicationFrame,
+                    "Server Socket konnte nicht erstellt werden. Bitte trennen und erneut verbinden.", 
+                    "Server Socket Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            
+            databaseThread.interrupt();
+            return false;
+        }
+        serverSocketThread.start();
+        
+        return true;
     }
     
     public void run()
@@ -53,22 +86,18 @@ public class ServerThread extends Thread implements Runnable
         if (newlyAcceptedClientSockets.size() > 0)
         {
             Socket clientSocket = newlyAcceptedClientSockets.poll();
-            try 
+            
+            ClientSocketThread newClientSocketThread = new ClientSocketThread(clientSocket);
+            if (newClientSocketThread.retrieveStreamsFromClients())
             {
-                ClientSocketThread newClientSocketThread = new ClientSocketThread(clientSocket);
                 newClientSocketThread.start();
-                clientSocketThreads.add(newClientSocketThread);                
-            } catch (Exception e) 
+                clientSocketThreads.add(newClientSocketThread); 
+            }
+            else
             {
-                System.out.println("Fehler beim abgreifen des InputStreams des neuen Clients. CLient wurde abgelehnt.");
-                try 
-                {
-                    clientSocket.close();                    
-                } catch (Exception ex) 
-                {
-                    System.out.println("Fehler beim abgreifen des InputStreams des neuen Clients. CLient wurde abgelehnt.");
-                }                
-            }            
+                clientSocket.close();
+                newClientSocketThread.interrupt();
+            }      
         }
     }
 

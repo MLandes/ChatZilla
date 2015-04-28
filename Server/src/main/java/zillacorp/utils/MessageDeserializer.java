@@ -5,18 +5,21 @@
  */
 package zillacorp.utils;
 
-import java.util.Comparator;
+import com.google.gson.Gson;
 import zillacorp.dbModel.Message;
 
 /**
  *
  * @author l.hurtz
  */
-public class MessageSorter implements Comparator<Message>
+public class MessageDeserializer 
 {
-    @Override
-    public int compare(Message firstMessage, Message secondMessage)
+    
+    public static Message deserializeMessage(String serializedMessage) 
     {
-        return (int)(firstMessage.serverTimeStamp - firstMessage.serverTimeStamp);
-    }    
+        Gson gson = new Gson();
+        
+        return gson.fromJson(serializedMessage, Message.class);
+    }
+    
 }
