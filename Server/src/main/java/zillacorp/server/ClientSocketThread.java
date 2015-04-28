@@ -17,13 +17,13 @@ import zillacorp.utils.MessageDeserializer;
  *
  * @author l.hurtz
  */
-public class ClientSocketTask implements Runnable
+public class ClientSocketThread extends Thread implements Runnable
 {
     Socket clientSocket;
     Scanner inputFromClient;
     PrintWriter outputToClient;
     
-    public ClientSocketTask(Socket clientSocket) throws IOException
+    public ClientSocketThread(Socket clientSocket) throws IOException
     {
         this.clientSocket = clientSocket;
         inputFromClient = new Scanner(clientSocket.getInputStream());
