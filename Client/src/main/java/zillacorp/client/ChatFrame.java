@@ -198,16 +198,15 @@ public class ChatFrame extends javax.swing.JFrame {
             Message sentMessage = new Message();
             sentMessage.messageText = this.MessageTextField.getText();
             sentMessage.userNickname = Application.RegisterAndLoginDialog.getUserName();
-            Application.SocketThread.OutgoingMessages.offer(sentMessage);
+            Application.SocketHandler.OutgoingMessages.offer(sentMessage);
             this.MessageTextField.setText("");
         }
     }//GEN-LAST:event_SendenButtonActionPerformed
 
     private void TrennenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TrennenButtonActionPerformed
-        //Reihenfolge beachten!
+        Application.SocketHandler.TerminateSocketThread();
+        Application.SocketHandler.CloseSocketConnection();
         this.dispose();
-        Application.SocketThread.terminate();
-        Application.SocketThread.closeSocketConnection();
         Application.RegisterAndLoginDialog.setVisible(true);
     }//GEN-LAST:event_TrennenButtonActionPerformed
 

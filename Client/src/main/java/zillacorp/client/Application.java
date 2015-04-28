@@ -13,7 +13,7 @@ public class Application {
 
     public static RegisterAndLoginDialog RegisterAndLoginDialog;
     public static ChatFrame ChatFrame;
-    public static SocketThread SocketThread;
+    public static SocketHandler SocketHandler;
     
     
     /**

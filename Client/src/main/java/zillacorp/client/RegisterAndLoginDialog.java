@@ -193,10 +193,10 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void VerbindenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerbindenButtonActionPerformed
-        Application.SocketThread = new SocketThread();
-        if ( Application.SocketThread.tryConnectToServerSocket() ) {
+        Application.SocketHandler = new SocketHandler();
+        if ( Application.SocketHandler.TryConnectToServerSocket() ) {
             Application.ChatFrame = new ChatFrame();
-            Application.SocketThread.start();
+            Application.SocketHandler.StartSocketThread();
             this.setVisible(false);
             Application.ChatFrame.setVisible(true);
         } else {
