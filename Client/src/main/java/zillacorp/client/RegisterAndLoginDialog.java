@@ -121,7 +121,7 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         ServerLabel.setLabelFor(ServerComboBox);
         ServerLabel.setText("Server:");
 
-        ServerComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.59.230", "172.16.53.124" }));
+        ServerComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.59.230", "172.16.53.124", "localhost" }));
 
         VerbindenButton.setText("Verbinden");
         VerbindenButton.addActionListener(new java.awt.event.ActionListener() {
