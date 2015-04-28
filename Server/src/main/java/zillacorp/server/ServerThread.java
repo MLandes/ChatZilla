@@ -86,22 +86,18 @@ public class ServerThread extends Thread implements Runnable
         if (newlyAcceptedClientSockets.size() > 0)
         {
             Socket clientSocket = newlyAcceptedClientSockets.poll();
-            try 
+            
+            ClientSocketThread newClientSocketThread = new ClientSocketThread(clientSocket);
+            if (newClientSocketThread.retrieveStreamsFromClients())
             {
-                ClientSocketThread newClientSocketThread = new ClientSocketThread(clientSocket);
                 newClientSocketThread.start();
-                clientSocketThreads.add(newClientSocketThread);                
-            } catch (Exception e) 
+                clientSocketThreads.add(newClientSocketThread); 
+            }
+            else
             {
-                System.out.println("Fehler beim abgreifen des InputStreams des neuen Clients. CLient wurde abgelehnt.");
-                try 
-                {
-                    clientSocket.close();                    
-                } catch (Exception ex) 
-                {
-                    System.out.println("Fehler beim abgreifen des InputStreams des neuen Clients. CLient wurde abgelehnt.");
-                }                
-            }            
+                clientSocket.close();
+                newClientSocketThread.interrupt();
+            }      
         }
     }
 

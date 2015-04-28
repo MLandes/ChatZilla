@@ -23,13 +23,25 @@ public class ClientSocketThread extends Thread implements Runnable
     Scanner inputFromClient;
     PrintWriter outputToClient;
     
-    public ClientSocketThread(Socket clientSocket) throws IOException
+    public ClientSocketThread(Socket clientSocket)
     {
         this.setName("ClientSocketThread");
         
         this.clientSocket = clientSocket;
-        inputFromClient = new Scanner(clientSocket.getInputStream());
-        outputToClient = new PrintWriter(clientSocket.getOutputStream());
+    }
+    
+    public boolean retrieveStreamsFromClients()
+    {
+        try 
+        {
+            inputFromClient = new Scanner(clientSocket.getInputStream());
+            outputToClient = new PrintWriter(clientSocket.getOutputStream());     
+            return true;
+        } catch (Exception e) 
+        {
+            return false;
+        }
+        
     }
     
     @Override
