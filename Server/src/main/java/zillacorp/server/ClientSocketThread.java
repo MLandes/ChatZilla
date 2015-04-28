@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import zillacorp.model.Message;
+import zillacorp.utils.MessageDeserializer;
 
 /**
  *
@@ -39,8 +40,7 @@ public class ClientSocketThread extends Thread implements Runnable
             
             newMessageAsJson = inputFromClient.nextLine();  
             
-            newMessage.messageText = newMessageAsJson;
-            newMessage.userNickname = userNickname;
+            newMessage = MessageDeserializer.deserializeMessage(newMessageAsJson);
             
             ServerThread.messagesFromClients.add(newMessage);
         }
