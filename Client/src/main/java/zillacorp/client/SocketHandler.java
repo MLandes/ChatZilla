@@ -80,7 +80,7 @@ public class SocketHandler implements Runnable {
             Scanner inputStream = new Scanner(this.clientSocket.getInputStream());
             PrintWriter outputStream = new PrintWriter(this.clientSocket.getOutputStream(), true);
             
-            String inputToken = inputStream.next();
+            String inputToken = "neuer thread benötigt"; //inputStream.next();
             
             this.handleAuthentification(inputToken, outputStream);
             this.handleMessageHistory(inputToken,outputStream);
