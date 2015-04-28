@@ -11,7 +11,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import zillacorp.dbModel.Message;
-import zillacorp.utils.MessageDeserializer;
+import zillacorp.dbModel.UserOnline;
+import zillacorp.dbModel.UserRegistered;
+import zillacorp.socketModel.HistoryRequest;
+import zillacorp.utils.JsonDeserializer;
 
 /**
  *
@@ -47,14 +50,12 @@ public class ClientSocketThread extends Thread implements Runnable
     @Override
     public void run()
     {
-        String newMessageAsJson;
+        String inputAsJson;
         while(true)
         {            
-            newMessageAsJson = inputFromClient.nextLine();  
+            inputAsJson = inputFromClient.nextLine();
             
-            Message newMessage = MessageDeserializer.deserializeMessage(newMessageAsJson);
-            
-            ServerThread.messagesFromClients.add(newMessage);
+            deserializeAndHandleInput(inputAsJson);
         }
     }
     
@@ -63,5 +64,58 @@ public class ClientSocketThread extends Thread implements Runnable
         String serializedMessage = new Gson().toJson(message);
         
         outputToClient.println(serializedMessage);
+    }
+
+    private void deserializeAndHandleInput(String inputAsJson) 
+    {
+        Message inputAsMessage = JsonDeserializer.deserializeMessage(inputAsJson);
+        if (inputAsMessage != null)
+        {
+            handleMessage(inputAsMessage);
+            return;
+        }
+        
+        UserOnline inputAsUserOnline = JsonDeserializer.deserializeUserOnline(inputAsJson);
+        if (inputAsUserOnline != null)
+        {
+            handleUserOnline(inputAsMessage);
+            return;
+        }
+        
+        UserRegistered inputAsUserRegistered = JsonDeserializer.deserializeUserRegistered(inputAsJson);
+        if (inputAsUserRegistered != null)
+        {
+            handleUserRegistered(inputAsMessage);
+            return;
+        }
+        
+        HistoryRequest inputAsHistoryRequest = JsonDeserializer.deserializeHistoryRequest(inputAsJson);
+        if (inputAsUserRegistered != null)
+        {
+            handleHistoryRequest(inputAsMessage);
+            return;
+        }
+        
+        
+    }
+
+    private void handleMessage(Message inputAsMessage)
+    {
+        ServerThread.messagesFromClients.add(inputAsMessage);
+    }
+
+    private void handleUserOnline(Message inputAsUserOnline)
+    {
+        
+    }
+
+    private void handleUserRegistered(Message inputAsUserRegistered)
+    {
+        
+    }
+
+    private void handleHistoryRequest(Message inputAsHistoryRequest)
+    {
+        
     }
 }
