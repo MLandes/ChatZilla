@@ -26,6 +26,11 @@ public class DatabaseMessageThread extends Thread implements Runnable
 {
     CouchDbClient messageDatabaseClient;
     
+    public DatabaseMessageThread()
+    {
+        this.setName("DatabaseMessageThread");
+    }
+    
     @Override
     public void run()
     {

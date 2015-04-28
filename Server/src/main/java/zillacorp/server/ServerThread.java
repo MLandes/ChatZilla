@@ -29,6 +29,7 @@ public class ServerThread extends Thread implements Runnable
     
     public ServerThread(ApplicationFrame applicationFrame)
     {
+        this.setName("ServerThread");
         this.applicationFrame = applicationFrame;
         
         databaseThread = new DatabaseMessageThread();        

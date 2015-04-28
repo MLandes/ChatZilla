@@ -19,6 +19,11 @@ public class ServerSocketThread extends Thread implements Runnable
     ServerSocket serverSocket;
     public boolean isAllowedToRun = true;
     
+    public ServerSocketThread()
+    {
+        this.setName("ServerSocketThread");
+    }
+    
     public boolean TryCreateServerSocket()
     {
         try 
