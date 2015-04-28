@@ -8,6 +8,8 @@ package zillacorp.server;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.swing.JOptionPane;
 import zillacorp.model.Message;
 
@@ -21,7 +23,7 @@ public class ServerThread extends Thread implements Runnable
     
     DatabaseMessageThread databaseThread;
     ServerSocketThread serverSocketThread;
-    ArrayList<ClientSocketThread> clientSocketThreads;
+    ExecutorService clientSocketThreadPool;
     
     static ConcurrentLinkedQueue<Message> messagesFromClients;
     static ConcurrentLinkedQueue<Message> messagesFromDatabase;
@@ -33,7 +35,7 @@ public class ServerThread extends Thread implements Runnable
         
         databaseThread = new DatabaseMessageThread();        
         serverSocketThread = new ServerSocketThread();        
-        clientSocketThreads = new ArrayList<>();
+        clientSocketThreadPool = Executors.newCachedThreadPool();
         
         messagesFromClients = new ConcurrentLinkedQueue<>();
         messagesFromDatabase = new ConcurrentLinkedQueue<>();
@@ -87,9 +89,8 @@ public class ServerThread extends Thread implements Runnable
             Socket clientSocket = newlyAcceptedClientSockets.poll();
             try 
             {
-                ClientSocketThread newClientSocketThread = new ClientSocketThread(clientSocket);
-                newClientSocketThread.start();
-                clientSocketThreads.add(newClientSocketThread);                
+                ClientSocketTask newClientSocketThread = new ClientSocketTask(clientSocket);
+                clientSocketThreadPool.execute(newClientSocketThread);                
             } catch (Exception e) 
             {
                 System.out.println("Fehler beim abgreifen des InputStreams des neuen Clients. CLient wurde abgelehnt.");
@@ -119,7 +120,7 @@ public class ServerThread extends Thread implements Runnable
         {
             Message newMessageFromDatabase = messagesFromDatabase.poll();
             
-            for (ClientSocketThread client : clientSocketThreads)
+            for (ClientSocketTask client : clientSocketThreadPool)
             {
                 client.sendMessageToClient(newMessageFromDatabase);
             }
