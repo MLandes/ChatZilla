@@ -6,7 +6,6 @@
 package zillacorp.utils;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import zillacorp.model.Message;
 
 /**
@@ -16,7 +15,8 @@ import zillacorp.model.Message;
 public class MessageDeserializer 
 {
     
-    public static Message deserializeMessage(JsonObject serializedMessage) {
+    public static Message deserializeMessage(String serializedMessage) 
+    {
         Gson gson = new Gson();
         
         return gson.fromJson(serializedMessage, Message.class);
