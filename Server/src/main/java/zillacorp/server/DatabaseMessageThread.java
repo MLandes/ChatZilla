@@ -7,9 +7,12 @@ package zillacorp.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import javax.print.attribute.standard.DateTimeAtCompleted;
 import org.lightcouch.Changes;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
@@ -41,7 +44,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
             if(messageChangesFeed.next() != null)
             {
                 JsonObject serializedMessage = messageChangesFeed.next().getDoc().getAsJsonObject();
-                Message message = MessageDeserializer.deserializeMessage(serializedMessage);
+                Message message = MessageDeserializer.deserializeMessage(serializedMessage.getAsString());
                 ServerThread.messagesFromDatabase.add(message);
             }
         }
@@ -49,6 +52,8 @@ public class DatabaseMessageThread extends Thread implements Runnable
     
     public void sendToDatabase(Message message)
     {
+        message.serverTimeStamp = Date.from(Instant.now()).getTime();
+        
         messageDatabaseClient.save(message);
     }
     
@@ -101,7 +106,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
         
         for(JsonObject document : allDocuments)
         {
-            Message messageFromDocument = MessageDeserializer.deserializeMessage(document);
+            Message messageFromDocument = MessageDeserializer.deserializeMessage(document.getAsString());
             if (messageFromDocument.serverTimeStamp >= sinceTimeStamp)
             {
                 history.add(messageFromDocument);
