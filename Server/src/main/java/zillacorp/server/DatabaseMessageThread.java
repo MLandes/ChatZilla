@@ -14,6 +14,7 @@ import org.lightcouch.Changes;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
 import zillacorp.model.Message;
+import zillacorp.utils.MessageDeserializer;
 import zillacorp.utils.MessageSorter;
 
 /**
@@ -40,7 +41,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
             if(messageChangesFeed.next() != null)
             {
                 JsonObject serializedMessage = messageChangesFeed.next().getDoc().getAsJsonObject();
-                Message message = deserializeMessage(serializedMessage);
+                Message message = MessageDeserializer.deserializeMessage(serializedMessage);
                 ServerThread.messagesFromDatabase.add(message);
             }
         }
@@ -87,12 +88,6 @@ public class DatabaseMessageThread extends Thread implements Runnable
         messageDatabaseClient = new CouchDbClient(properties);
     }
     
-    private Message deserializeMessage(JsonObject serializedMessage) {
-        Gson gson = messageDatabaseClient.getGson();
-        
-        return gson.fromJson(serializedMessage, Message.class);
-    }
-    
     private List<JsonObject> getAllMessageDocumentsFromDatabase()
     {
         return messageDatabaseClient.view("_all_docs")
@@ -106,7 +101,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
         
         for(JsonObject document : allDocuments)
         {
-            Message messageFromDocument = deserializeMessage(document);
+            Message messageFromDocument = MessageDeserializer.deserializeMessage(document);
             if (messageFromDocument.serverTimeStamp >= sinceTimeStamp)
             {
                 history.add(messageFromDocument);
