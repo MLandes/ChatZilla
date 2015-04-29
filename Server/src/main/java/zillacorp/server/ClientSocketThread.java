@@ -118,10 +118,9 @@ public class ClientSocketThread extends Thread implements Runnable
     private void handleHistoryRequest(HistoryRequest inputAsHistoryRequest)
     {
         ArrayList<Message> messageHistory = ServerThread.getRequestedHistory(inputAsHistoryRequest);
+
+        String serializedHistory = new Gson().toJson(messageHistory);
         
-        for (Message message : messageHistory)
-        {
-            sendMessageToClient(message);
-        }
+        outputToClient.println(serializedHistory);
     }
 }
