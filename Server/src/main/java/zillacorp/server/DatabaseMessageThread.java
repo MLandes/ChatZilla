@@ -15,6 +15,7 @@ import org.lightcouch.Changes;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
 import zillacorp.dbModel.Message;
+import zillacorp.socketModel.HistoryRequest;
 import zillacorp.utils.JsonDeserializer;
 import zillacorp.utils.MessageSorter;
 
@@ -54,11 +55,11 @@ public class DatabaseMessageThread extends Thread implements Runnable
         messageDatabaseClient.save(message);
     }
     
-    public ArrayList<Message> getHistorySince(long sinceTimeStamp)
+    public ArrayList<Message> getHistorySince(HistoryRequest historyRequest)
     {
         List<JsonObject> allDocuments = getAllMessageDocumentsFromDatabase();
         
-        ArrayList<Message> history = convertAndFilterDocumentsToMessages(allDocuments, sinceTimeStamp);
+        ArrayList<Message> history = convertAndFilterDocumentsToMessages(allDocuments, historyRequest.historyTimestamp);
         
         Collections.sort(history, new MessageSorter());
         

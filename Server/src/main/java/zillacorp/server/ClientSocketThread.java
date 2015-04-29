@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 import zillacorp.dbModel.Message;
 import zillacorp.dbModel.UserOnline;
@@ -78,21 +79,21 @@ public class ClientSocketThread extends Thread implements Runnable
         UserOnline inputAsUserOnline = JsonDeserializer.deserializeUserOnline(inputAsJson);
         if (inputAsUserOnline != null)
         {
-            handleUserOnline(inputAsMessage);
+            handleUserOnline(inputAsUserOnline);
             return;
         }
         
         UserRegistered inputAsUserRegistered = JsonDeserializer.deserializeUserRegistered(inputAsJson);
         if (inputAsUserRegistered != null)
         {
-            handleUserRegistered(inputAsMessage);
+            handleUserRegistered(inputAsUserRegistered);
             return;
         }
         
         HistoryRequest inputAsHistoryRequest = JsonDeserializer.deserializeHistoryRequest(inputAsJson);
         if (inputAsUserRegistered != null)
         {
-            handleHistoryRequest(inputAsMessage);
+            handleHistoryRequest(inputAsHistoryRequest);
             return;
         }
         
@@ -104,18 +105,23 @@ public class ClientSocketThread extends Thread implements Runnable
         ServerThread.messagesFromClients.add(inputAsMessage);
     }
 
-    private void handleUserOnline(Message inputAsUserOnline)
+    private void handleUserOnline(UserOnline inputAsUserOnline)
     {
         
     }
 
-    private void handleUserRegistered(Message inputAsUserRegistered)
+    private void handleUserRegistered(UserRegistered inputAsUserRegistered)
     {
         
     }
 
-    private void handleHistoryRequest(Message inputAsHistoryRequest)
+    private void handleHistoryRequest(HistoryRequest inputAsHistoryRequest)
     {
+        ArrayList<Message> messageHistory = ServerThread.getRequestedHistory(inputAsHistoryRequest);
         
+        for (Message message : messageHistory)
+        {
+            sendMessageToClient(message);
+        }
     }
 }

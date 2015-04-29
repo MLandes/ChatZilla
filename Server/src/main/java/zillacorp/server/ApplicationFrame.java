@@ -5,6 +5,9 @@
  */
 package zillacorp.server;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Martin
@@ -34,6 +37,7 @@ public class ApplicationFrame extends javax.swing.JFrame {
         VerbindenButton = new javax.swing.JButton();
         StatusLabel = new javax.swing.JLabel();
         BeendenButton = new javax.swing.JButton();
+        TrennenButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatZilla Server");
@@ -41,7 +45,7 @@ public class ApplicationFrame extends javax.swing.JFrame {
 
         DatenbankLabel.setText("Datenbank:");
 
-        DbIpComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.59.230", "172.16.53.124", "localhost" }));
+        DbIpComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.59.230", "172.16.53.124", "localhost", "192.168.0.134" }));
 
         VerbindenButton.setText("Verbinden");
         VerbindenButton.addActionListener(new java.awt.event.ActionListener() {
@@ -54,6 +58,19 @@ public class ApplicationFrame extends javax.swing.JFrame {
 
         BeendenButton.setText("Beenden");
         BeendenButton.setName(""); // NOI18N
+        BeendenButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BeendenButtonActionPerformed(evt);
+            }
+        });
+
+        TrennenButton.setText("Trennen");
+        TrennenButton.setEnabled(false);
+        TrennenButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TrennenButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -62,19 +79,21 @@ public class ApplicationFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(StatusLabel)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(BeendenButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(DatenbankLabel)
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(DbIpComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(VerbindenButton)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BeendenButton)
+                                .addComponent(DatenbankLabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(DbIpComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(StatusLabel)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(VerbindenButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(TrennenButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -85,7 +104,9 @@ public class ApplicationFrame extends javax.swing.JFrame {
                     .addComponent(DatenbankLabel)
                     .addComponent(DbIpComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(VerbindenButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(VerbindenButton)
+                    .addComponent(TrennenButton))
                 .addGap(43, 43, 43)
                 .addComponent(StatusLabel)
                 .addGap(18, 18, 18)
@@ -102,12 +123,37 @@ public class ApplicationFrame extends javax.swing.JFrame {
         if (serverThread.tryInitializeDatabaseConnectionAndServerSocket(databaseIp))
         {
             serverThread.start();
+            VerbindenButton.setEnabled(false);
+            TrennenButton.setEnabled(true);
+            StatusLabel.setText("Verbunden mit " + databaseIp);
         }
         else
         {
             serverThread = null;
         }        
     }//GEN-LAST:event_VerbindenButtonClicked
+
+    private void TrennenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TrennenButtonActionPerformed
+        serverThread.isAllowedToRun = false;
+        try {
+            serverThread.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ApplicationFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TrennenButton.setEnabled(false);
+        VerbindenButton.setEnabled(true); 
+        StatusLabel.setText("nicht verbunden");
+    }//GEN-LAST:event_TrennenButtonActionPerformed
+
+    private void BeendenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BeendenButtonActionPerformed
+        if (TrennenButton.isEnabled())
+        {
+            TrennenButton.doClick();
+        }
+        
+        this.dispose();
+    }//GEN-LAST:event_BeendenButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -149,6 +195,7 @@ public class ApplicationFrame extends javax.swing.JFrame {
     private javax.swing.JLabel DatenbankLabel;
     private javax.swing.JComboBox DbIpComboBox;
     private javax.swing.JLabel StatusLabel;
+    private javax.swing.JButton TrennenButton;
     private javax.swing.JButton VerbindenButton;
     // End of variables declaration//GEN-END:variables
 }

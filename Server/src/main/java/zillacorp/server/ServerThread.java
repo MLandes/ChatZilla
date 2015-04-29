@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import zillacorp.dbModel.Message;
+import zillacorp.socketModel.HistoryRequest;
 
 /**
  *
@@ -21,10 +22,11 @@ import zillacorp.dbModel.Message;
 public class ServerThread extends Thread implements Runnable
 {
     ApplicationFrame applicationFrame;
+    boolean isAllowedToRun = true;
     
-    DatabaseMessageThread databaseThread;
-    ServerSocketThread serverSocketThread;
-    ArrayList<ClientSocketThread> clientSocketThreads;
+    static DatabaseMessageThread databaseMessageThread;
+    static ServerSocketThread serverSocketThread;
+    static ArrayList<ClientSocketThread> clientSocketThreads;
     
     static ConcurrentLinkedQueue<Message> messagesFromClients;
     static ConcurrentLinkedQueue<Message> messagesFromDatabase;
@@ -35,7 +37,7 @@ public class ServerThread extends Thread implements Runnable
         this.setName("ServerThread");
         this.applicationFrame = applicationFrame;
         
-        databaseThread = new DatabaseMessageThread();        
+        databaseMessageThread = new DatabaseMessageThread();        
         serverSocketThread = new ServerSocketThread();        
         clientSocketThreads = new ArrayList<>();
         
@@ -46,26 +48,26 @@ public class ServerThread extends Thread implements Runnable
     
     public boolean tryInitializeDatabaseConnectionAndServerSocket(String databaseIp)
     {
-        if (!databaseThread.tryConnectToMessageDatbase(databaseIp))
+        if (!databaseMessageThread.tryConnectToMessageDatbase(databaseIp))
         {
             JOptionPane.showMessageDialog(applicationFrame,
-                    "Datenbank nicht erreichbar. Bitte trennen und erneut verbinden.", 
+                    "Datenbank nicht erreichbar. Bitte zu anderer IP verbinden.", 
                     "Database Error", 
                     JOptionPane.ERROR_MESSAGE);
             
             return false;
         }
-        databaseThread.start();
+        databaseMessageThread.start();
         
         serverSocketThread = new ServerSocketThread();
         if (!serverSocketThread.TryCreateServerSocket())
         {
             JOptionPane.showMessageDialog(applicationFrame,
-                    "Server Socket konnte nicht erstellt werden. Bitte trennen und erneut verbinden.", 
+                    "Server Socket konnte nicht erstellt werden. Bitte erneut verbinden.", 
                     "Server Socket Error", 
                     JOptionPane.ERROR_MESSAGE);
             
-            databaseThread.interrupt();
+            databaseMessageThread.interrupt();
             return false;
         }
         serverSocketThread.start();
@@ -73,15 +75,23 @@ public class ServerThread extends Thread implements Runnable
         return true;
     }
     
+    static ArrayList<Message> getRequestedHistory(HistoryRequest historyRequest)
+    {
+        ArrayList messageHistory = databaseMessageThread.getHistorySince(historyRequest);
+        return messageHistory;
+    }
+    
+    @Override
     public void run()
     {
-        while (true) 
+        while (isAllowedToRun) 
         {
             HandleNewClients();
             HandleNewMessagesFromClients();
             HandleNewMessagesFromDatabase();            
         }
         
+        TerminateThisThread();        
     }
 
     private void HandleNewClients()
@@ -113,7 +123,7 @@ public class ServerThread extends Thread implements Runnable
         if (messagesFromClients.size() > 0)
         {
             Message newMessageFromClient = messagesFromClients.poll();
-            databaseThread.sendToDatabase(newMessageFromClient);
+            databaseMessageThread.sendToDatabase(newMessageFromClient);
         }
     }
 
@@ -127,6 +137,40 @@ public class ServerThread extends Thread implements Runnable
             {
                 client.sendMessageToClient(newMessageFromDatabase);
             }
+        }
+    }
+
+    private void TerminateThisThread()
+    {
+        try
+        {
+            for (ClientSocketThread client : clientSocketThreads)
+            {
+                client.interrupt();
+                try 
+                {
+                    client.clientSocket.close();
+                } catch (IOException ex) 
+                {
+                    Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                clientSocketThreads.remove(client);
+            }
+
+            serverSocketThread.interrupt();
+            try 
+            {
+                serverSocketThread.serverSocket.close();
+            } catch (IOException ex) 
+            {
+                Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            databaseMessageThread.interrupt();
+            databaseMessageThread.messageDatabaseClient.shutdown();
+        } catch (Exception ex) 
+        {
+            Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
