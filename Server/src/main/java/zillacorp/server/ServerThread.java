@@ -21,7 +21,7 @@ import zillacorp.socketModel.HistoryRequest;
  */
 public class ServerThread extends Thread implements Runnable
 {
-    ApplicationFrame applicationFrame;
+    static ApplicationFrame applicationFrame;
     boolean isAllowedToRun = true;
     
     static DatabaseMessageThread databaseMessageThread;
@@ -140,7 +140,7 @@ public class ServerThread extends Thread implements Runnable
         }
     }
 
-    private void TerminateThisThread()
+    public static void TerminateThisThread()
     {
         try
         {

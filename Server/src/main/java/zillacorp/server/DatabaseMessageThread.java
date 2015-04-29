@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.lightcouch.Changes;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbProperties;
@@ -37,14 +38,25 @@ public class DatabaseMessageThread extends Thread implements Runnable
     {
         Changes messageChangesFeed = getMessageChangesFeed();
         
-        while(messageChangesFeed.hasNext())
+        try
         {
-            if(messageChangesFeed.next() != null)
+            while(messageChangesFeed.hasNext())
             {
-                JsonObject serializedMessage = messageChangesFeed.next().getDoc().getAsJsonObject();
-                Message message = JsonDeserializer.deserializeMessage(serializedMessage.getAsString());
-                ServerThread.messagesFromDatabase.add(message);
+                if(messageChangesFeed.next() != null)
+                {
+                    JsonObject serializedMessage = messageChangesFeed.next().getDoc().getAsJsonObject();
+                    Message message = JsonDeserializer.deserializeMessage(serializedMessage.getAsString());
+                    ServerThread.messagesFromDatabase.add(message);
+                }
             }
+        } catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(ServerThread.applicationFrame,
+                    "Datenbank nicht erreichbar. Bitte zu anderer IP verbinden.", 
+                    "Database Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            
+            ServerThread.TerminateThisThread();
         }
     }
     
