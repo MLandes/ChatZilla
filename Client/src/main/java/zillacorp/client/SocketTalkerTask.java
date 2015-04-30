@@ -83,11 +83,11 @@ public class SocketTalkerTask implements Runnable {
             }
             Application.SocketHandler.CloseSocketConnection();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(
-                        Application.RegisterAndLoginDialog,
-                        ex.toString(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(
+//                        Application.RegisterAndLoginDialog,
+//                        ex.toString(),
+//                        "Error",
+//                        JOptionPane.ERROR_MESSAGE);
             Application.SocketHandler.CloseSocketConnection();
             Application.ChatFrame.dispose();
             Application.RegisterAndLoginDialog.setVisible(true);

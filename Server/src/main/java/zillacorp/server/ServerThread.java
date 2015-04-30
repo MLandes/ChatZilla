@@ -77,7 +77,7 @@ public class ServerThread extends Thread implements Runnable
     
     static ArrayList<Message> getRequestedHistory(HistoryRequest historyRequest)
     {
-        ArrayList messageHistory = databaseMessageThread.getHistorySince(historyRequest);
+        ArrayList<Message> messageHistory = databaseMessageThread.getHistorySince(historyRequest);
         return messageHistory;
     }
     

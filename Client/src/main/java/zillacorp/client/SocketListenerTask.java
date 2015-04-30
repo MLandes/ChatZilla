@@ -75,7 +75,7 @@ public class SocketListenerTask implements Runnable {
             while(this.isThreadAllowedToRun) {
                 
                 String inputToken = inputStream.nextLine();
-                this.handleIncomingTokens(inputToken);
+                this.deserializeAndReactSpecificTo(inputToken);
                 
             }
             
@@ -89,53 +89,48 @@ public class SocketListenerTask implements Runnable {
             }
             Application.SocketHandler.CloseSocketConnection();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(
-                        Application.RegisterAndLoginDialog,
-                        ex.toString(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(
+//                        Application.RegisterAndLoginDialog,
+//                        ex.toString(),
+//                        "Error",
+//                        JOptionPane.ERROR_MESSAGE);
             Application.SocketHandler.CloseSocketConnection();
             Application.ChatFrame.dispose();
             Application.RegisterAndLoginDialog.setVisible(true);
         }
     }
     
-    
-    private void handleIncomingTokens(String inputToken) {
-        if (Application.RegisterAndLoginDialog.isMessageHistoryRequested() && this.hasHistoryResponseBeenReceived == false) {
-            this.incomingTokenQueue.offer(inputToken);
-        } else if (this.incomingTokenQueue.isEmpty()) {
-            this.deserializeAndReactSpecificTo(inputToken);
-        } else {
-            while (this.incomingTokenQueue.isEmpty() == false) {                
-                this.deserializeAndReactSpecificTo(this.incomingTokenQueue.poll());
-            }
-        }
-    }
-    
-    private void deserializeAndReactSpecificTo(String token) {
+    private void deserializeAndReactSpecificTo(String inputToken) {
         
-        Message inputAsMessage = JsonDeserializer.deserializeMessage(token);
-        if (inputAsMessage != null)
+        Message inputAsMessage = JsonDeserializer.deserializeMessage(inputToken);
+        if (inputAsMessage != null && inputAsMessage.messageText != null)
         {
-            Application.ChatFrame.UpdateMessageHistory(inputAsMessage);
+            if (Application.RegisterAndLoginDialog.isMessageHistoryRequested() && this.hasHistoryResponseBeenReceived == false) {
+                this.incomingTokenQueue.offer(inputToken);
+            } else {
+                Application.ChatFrame.UpdateMessageHistory(inputAsMessage);
+            }
             return;
         }
         
-        UserOnline inputAsUserOnline = JsonDeserializer.deserializeUserOnline(token);
-        if (inputAsUserOnline != null)
+        HistoryResponse inputAsHistoryResponse = JsonDeserializer.deserializeHistoryResponse(inputToken);
+        if (inputAsHistoryResponse != null && inputAsHistoryResponse.messageList != null)
+        {
+            this.hasHistoryResponseBeenReceived = true;
+            Application.ChatFrame.UpdateMessageHistory(inputAsHistoryResponse.messageList);
+            while (this.incomingTokenQueue.isEmpty() == false) {                
+                this.deserializeAndReactSpecificTo(this.incomingTokenQueue.poll());
+            }
+            return;
+        }
+        
+        UserOnline inputAsUserOnline = JsonDeserializer.deserializeUserOnline(inputToken);
+        if (inputAsUserOnline != null && inputAsUserOnline.nickname != null)
         {
             
             return;
         }
         
-        HistoryResponse inputAsHistoryResponse = JsonDeserializer.deserializeHistoryResponse(token);
-        if (inputAsHistoryResponse != null)
-        {
-            ArrayList<Message> messageHistory = inputAsHistoryResponse.messageList;
-            Application.ChatFrame.UpdateMessageHistory(messageHistory);
-            return;
-        }
     }
 
 }
