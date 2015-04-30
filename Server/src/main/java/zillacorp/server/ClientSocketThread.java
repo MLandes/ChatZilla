@@ -81,28 +81,28 @@ public class ClientSocketThread extends Thread implements Runnable
     private void deserializeAndHandleInput(String inputAsJson) 
     {
         Message inputAsMessage = JsonDeserializer.deserializeMessage(inputAsJson);
-        if (inputAsMessage != null)
+        if (inputAsMessage.messageText != null)
         {
             handleMessage(inputAsMessage);
             return;
         }
         
         UserOnline inputAsUserOnline = JsonDeserializer.deserializeUserOnline(inputAsJson);
-        if (inputAsUserOnline != null)
+        if (inputAsUserOnline.nickname != null)
         {
             handleUserOnline(inputAsUserOnline);
             return;
         }
         
         UserRegistered inputAsUserRegistered = JsonDeserializer.deserializeUserRegistered(inputAsJson);
-        if (inputAsUserRegistered != null)
+        if (inputAsUserRegistered.nickname != null)
         {
             handleUserRegistered(inputAsUserRegistered);
             return;
         }
         
         HistoryRequest inputAsHistoryRequest = JsonDeserializer.deserializeHistoryRequest(inputAsJson);
-        if (inputAsHistoryRequest != null)
+        if (inputAsHistoryRequest.historyTimestamp != 0)
         {
             handleHistoryRequest(inputAsHistoryRequest);
             return;
