@@ -105,11 +105,11 @@ public class SocketListenerTask implements Runnable {
         Message inputAsMessage = JsonDeserializer.deserializeMessage(inputToken);
         if (inputAsMessage != null && inputAsMessage.messageText != null)
         {
-            if (Application.RegisterAndLoginDialog.isMessageHistoryRequested() && this.hasHistoryResponseBeenReceived == false) {
-                this.incomingTokenQueue.offer(inputToken);
-            } else {
+//            if (Application.RegisterAndLoginDialog.isMessageHistoryRequested() && this.hasHistoryResponseBeenReceived == false) {
+//                this.incomingTokenQueue.offer(inputToken);
+//            } else {
                 Application.ChatFrame.UpdateMessageHistory(inputAsMessage);
-            }
+//            }
             return;
         }
         

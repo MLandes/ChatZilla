@@ -73,9 +73,14 @@ public class ClientSocketThread extends Thread implements Runnable
     }
     public void sendHistoryToClient(ArrayList<Message> messageHistory)
     {
-        String serializedHistory = new Gson().toJson(messageHistory);
-        outputToClient.println(serializedHistory);
-        hasHistoryBeenSent = true;
+        for (Message message : messageHistory)
+        {
+            sendMessageToClient(message);
+        }
+        
+//        String serializedHistory = new Gson().toJson(messageHistory);
+//        outputToClient.println(serializedHistory);
+//        hasHistoryBeenSent = true;
     }
 
     private void deserializeAndHandleInput(String inputAsJson) 
