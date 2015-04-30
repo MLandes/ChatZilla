@@ -79,7 +79,7 @@ public class SocketListenerTask implements Runnable {
                 
             }
             
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             if (Application.ChatFrame.isVisible()) {
                 JOptionPane.showMessageDialog(
                         Application.ChatFrame,
@@ -88,15 +88,15 @@ public class SocketListenerTask implements Runnable {
                         JOptionPane.WARNING_MESSAGE);
             }
             Application.SocketHandler.CloseSocketConnection();
-        } catch (Exception ex) {
+//        } catch (Exception ex) {
 //            JOptionPane.showMessageDialog(
 //                        Application.RegisterAndLoginDialog,
 //                        ex.toString(),
 //                        "Error",
 //                        JOptionPane.ERROR_MESSAGE);
-            Application.SocketHandler.CloseSocketConnection();
-            Application.ChatFrame.dispose();
-            Application.RegisterAndLoginDialog.setVisible(true);
+//            Application.SocketHandler.CloseSocketConnection();
+//            Application.ChatFrame.dispose();
+//            Application.RegisterAndLoginDialog.setVisible(true);
         }
     }
     
