@@ -27,6 +27,9 @@ public class ClientSocketThread extends Thread implements Runnable
     Scanner inputFromClient;
     PrintWriter outputToClient;
     
+    private volatile boolean hasHistoryBeenSent = false;
+    
+    
     public ClientSocketThread(Socket clientSocket)
     {
         this.setName("ClientSocketThread");
@@ -62,9 +65,17 @@ public class ClientSocketThread extends Thread implements Runnable
     
     public void sendMessageToClient(Message message)
     {
+        while (!hasHistoryBeenSent) {            
+            //wait
+        }
         String serializedMessage = new Gson().toJson(message);
-        
         outputToClient.println(serializedMessage);
+    }
+    public void sendHistoryToClient(ArrayList<Message> messageHistory)
+    {
+        String serializedHistory = new Gson().toJson(messageHistory);
+        outputToClient.println(serializedHistory);
+        hasHistoryBeenSent = true;
     }
 
     private void deserializeAndHandleInput(String inputAsJson) 
@@ -119,8 +130,6 @@ public class ClientSocketThread extends Thread implements Runnable
     {
         ArrayList<Message> messageHistory = ServerThread.getRequestedHistory(inputAsHistoryRequest);
 
-        String serializedHistory = new Gson().toJson(messageHistory);
-        
-        outputToClient.println(serializedHistory);
+        sendHistoryToClient(messageHistory);
     }
 }
