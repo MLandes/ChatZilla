@@ -46,7 +46,7 @@ public class ChatFrame extends javax.swing.JFrame {
         Date newMessage_date = new Date(newMessage.serverTimeStamp);
         newMessageHistoryEntry = newMessageHistoryEntry
                 + newMessage_date.toString() + " - " + newMessage.userNickname + ":\n"
-                + newMessage.messageText + "\n";
+                + newMessage.messageText + "\n \n";
         this.MessageHistoryTextPane.setText(oldMessageHistoryEntries + newMessageHistoryEntry);
     }
     
