@@ -68,6 +68,16 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         return this.ServerComboBox.getSelectedItem().toString();
     }
     
+    public void ReconnectToServer() {
+        int currentIndex = this.ServerComboBox.getSelectedIndex();
+        currentIndex++;
+        try {
+            this.ServerComboBox.setSelectedIndex(currentIndex);
+        } catch (IllegalArgumentException e) {
+            this.ServerComboBox.setSelectedIndex(0);
+        }
+        this.VerbindenButton.doClick();
+    }
     
     private void setDefaultCloseOperationTo_Exit_On_Close() {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -122,7 +132,7 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         ServerLabel.setLabelFor(ServerComboBox);
         ServerLabel.setText("Server:");
 
-        ServerComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.59.230", "172.16.53.124", "localhost" }));
+        ServerComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.59.230", "172.16.53.124" }));
 
         VerbindenButton.setText("Verbinden");
         VerbindenButton.addActionListener(new java.awt.event.ActionListener() {

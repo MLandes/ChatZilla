@@ -83,11 +83,13 @@ public class SocketListenerTask implements Runnable {
             if (Application.ChatFrame.isVisible()) {
                 JOptionPane.showMessageDialog(
                         Application.ChatFrame,
-                        "Die Verbindung zum Server ist abgebrochen.\nSie können Trennen klicken und versuchen neu zu verbinden!",
+                        "Die Verbindung zum Server ist abgebrochen.\nEs wird versucht sich neu zu verbinden!",
                         "Connection Problem",
                         JOptionPane.WARNING_MESSAGE);
             }
             Application.SocketHandler.CloseSocketConnection();
+            Application.ChatFrame.dispose();
+            Application.RegisterAndLoginDialog.ReconnectToServer();
 //        } catch (Exception ex) {
 //            JOptionPane.showMessageDialog(
 //                        Application.RegisterAndLoginDialog,
