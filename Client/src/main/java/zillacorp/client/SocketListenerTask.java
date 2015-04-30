@@ -88,7 +88,6 @@ public class SocketListenerTask implements Runnable {
                         JOptionPane.WARNING_MESSAGE);
             }
             Application.SocketHandler.CloseSocketConnection();
-            Application.ChatFrame.dispose();
             Application.RegisterAndLoginDialog.ReconnectToServer();
 //        } catch (Exception ex) {
 //            JOptionPane.showMessageDialog(

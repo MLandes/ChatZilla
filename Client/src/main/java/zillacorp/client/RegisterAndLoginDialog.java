@@ -76,7 +76,18 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         } catch (IllegalArgumentException e) {
             this.ServerComboBox.setSelectedIndex(0);
         }
-        this.VerbindenButton.doClick();
+        Application.SocketHandler = new SocketHandler();
+        if ( Application.SocketHandler.TryConnectToServerSocket() ) {
+            Application.SocketHandler.StartCommunicationTasks();
+            this.setVisible(false);
+            Application.ChatFrame.UpdateServerIp(this.getServerIp());
+        } else {
+            JOptionPane.showMessageDialog(
+                    Application.RegisterAndLoginDialog,
+                    "Server ist nicht erreichbar.\nBitte wählen Sie einen anderen aus!",
+                    "Connection Problem",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }
     
     private void setDefaultCloseOperationTo_Exit_On_Close() {
