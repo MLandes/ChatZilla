@@ -126,7 +126,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
         
         for(JsonObject document : allDocuments)
         {
-            Message messageFromDocument = JsonDeserializer.deserializeMessage(document.getAsString());
+            Message messageFromDocument = JsonDeserializer.deserializeMessage(document.toString());
             if (messageFromDocument.serverTimeStamp >= sinceTimeStamp)
             {
                 history.add(messageFromDocument);
