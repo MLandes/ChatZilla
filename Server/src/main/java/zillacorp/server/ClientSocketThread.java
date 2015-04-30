@@ -42,7 +42,7 @@ public class ClientSocketThread extends Thread implements Runnable
         try 
         {
             inputFromClient = new Scanner(clientSocket.getInputStream());
-            outputToClient = new PrintWriter(clientSocket.getOutputStream());     
+            outputToClient = new PrintWriter(clientSocket.getOutputStream(), true);     
             return true;
         } catch (Exception e) 
         {
