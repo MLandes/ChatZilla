@@ -102,7 +102,7 @@ public class SocketListenerTask implements Runnable {
     
     
     private void handleIncomingTokens(String inputToken) {
-        if (this.hasHistoryResponseBeenReceived == false) {
+        if (Application.RegisterAndLoginDialog.isMessageHistoryRequested() && this.hasHistoryResponseBeenReceived == false) {
             this.incomingTokenQueue.offer(inputToken);
         } else if (this.incomingTokenQueue.isEmpty()) {
             this.deserializeAndReactSpecificTo(inputToken);
