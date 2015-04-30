@@ -45,7 +45,7 @@ public class ApplicationFrame extends javax.swing.JFrame {
 
         DatenbankLabel.setText("Datenbank:");
 
-        DbIpComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.59.230", "172.16.53.124", "localhost", "192.168.0.134" }));
+        DbIpComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "172.16.59.230", "172.16.53.124", "localhost" }));
 
         VerbindenButton.setText("Verbinden");
         VerbindenButton.addActionListener(new java.awt.event.ActionListener() {

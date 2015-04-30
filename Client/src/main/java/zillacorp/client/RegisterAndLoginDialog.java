@@ -8,6 +8,7 @@ package zillacorp.client;
 import java.awt.Dialog;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
+import zillacorp.socketModel.HistoryRequest;
 
 /**
  *
@@ -196,7 +197,12 @@ public class RegisterAndLoginDialog extends javax.swing.JDialog {
         Application.SocketHandler = new SocketHandler();
         if ( Application.SocketHandler.TryConnectToServerSocket() ) {
             Application.ChatFrame = new ChatFrame();
-            Application.SocketHandler.StartSocketThread();
+            Application.SocketHandler.StartCommunicationTasks();
+            if (this.isMessageHistoryRequested()) {
+                HistoryRequest historyRequest = new HistoryRequest();
+                historyRequest.historyTimestamp = this.getTimestampForBeginningMessageHistory();
+                Application.SocketHandler.Send(historyRequest);
+            }
             this.setVisible(false);
             Application.ChatFrame.setVisible(true);
         } else {

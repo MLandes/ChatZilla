@@ -21,13 +21,12 @@ import zillacorp.dbModel.Message;
  *
  * @author Martin
  */
-public class SocketHandler implements Runnable {
+public class SocketHandler {
     
-    private Thread baseThread;
-    private volatile boolean isThreadAllowedToRun;
     private volatile Socket clientSocket;
     
-    public ConcurrentLinkedQueue<Message> OutgoingMessages = new ConcurrentLinkedQueue<>();
+    private SocketListenerTask socketListenerTask;
+    private SocketTalkerTask socketTalkerTask;
     
     
     public boolean TryConnectToServerSocket() {
@@ -50,89 +49,19 @@ public class SocketHandler implements Runnable {
         }
     }
     
-    public void StartSocketThread() {
-        if (this.baseThread == null) {
-            this.baseThread = new Thread(this);
-            this.isThreadAllowedToRun = true;
-            this.baseThread.start();
-        }
+    public void StartCommunicationTasks() {
+        this.socketListenerTask = new SocketListenerTask(clientSocket);
+        this.socketListenerTask.StartThread();
+        this.socketTalkerTask = new SocketTalkerTask(clientSocket);
+        this.socketTalkerTask.StartThread();
     }
-    public void TerminateSocketThread() {
-        if (this.baseThread != null) {
-            try {
-                this.isThreadAllowedToRun = false;
-                this.baseThread.join();
-                // Alternative: this.baseThread.interrupt();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(SocketHandler.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                this.baseThread = null;
-            }
-        }
-    }
-    
-    /**
-     * Methode, die in dem erstellten Thread ausgeführt wird.
-     */
-    @Override
-    public void run() {
-        try {          
-            Scanner inputStream = new Scanner(this.clientSocket.getInputStream());
-            PrintWriter outputStream = new PrintWriter(this.clientSocket.getOutputStream(), true);
-            
-            String inputToken = "neuer thread benötigt"; //inputStream.next();
-            
-            this.handleAuthentification(inputToken, outputStream);
-            this.handleMessageHistory(inputToken,outputStream);
-            while(this.isThreadAllowedToRun) {
-                this.handleOnlineClients(inputToken, outputStream);
-                this.handleIncomingMessages(inputToken);
-                this.handleOutgoingMessages(outputStream);
-            }
-        } catch (IOException ex) {
-            if (Application.ChatFrame.isVisible()) {
-                JOptionPane.showMessageDialog(
-                        Application.ChatFrame,
-                        "Die Verbindung zum Server ist abgebrochen.\nSie können Trennen klicken und versuchen neu zu verbinden!",
-                        "Connection Problem",
-                        JOptionPane.WARNING_MESSAGE);
-            }
-            this.CloseSocketConnection();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(
-                        Application.RegisterAndLoginDialog,
-                        ex.toString(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            this.CloseSocketConnection();
-            Application.ChatFrame.dispose();
-            Application.RegisterAndLoginDialog.setVisible(true);
-        }
+    public void StopCommunicationTasks() {
+        this.socketListenerTask.TerminateThread();
+        this.socketTalkerTask.TerminateThread();
     }
     
     
-    private void handleAuthentification(String inputToken, PrintWriter outputStream) {
-        
+    public void Send(Object data) {
+        this.socketTalkerTask.OutgoingTokenQueue.offer(data);
     }
-    
-    private void handleMessageHistory(String inputToken, PrintWriter outputStream) {
-        if (Application.RegisterAndLoginDialog.isMessageHistoryRequested()) {
-            //Application.RegisterAndLoginDialog.getTimestampForBeginningMessageHistory();
-        }
-    }
-    
-    private void handleOnlineClients(String inputToken, PrintWriter outputStream) {
-        
-    }
-    
-    private void handleIncomingMessages(String inputToken) {
-        
-    }
-    
-    private void handleOutgoingMessages(PrintWriter outputStream) {
-        if (!this.OutgoingMessages.isEmpty()) {
-            //Message SentMessage = this.OutgoingMessages.poll();
-        }
-    }
-    
 }

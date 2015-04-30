@@ -5,6 +5,7 @@
  */
 package zillacorp.client;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import javax.swing.DefaultListModel;
@@ -34,7 +35,7 @@ public class ChatFrame extends javax.swing.JFrame {
     }
 
     
-    public void UpdateMessageHistory(LinkedList<Message> newMessages) {
+    public void UpdateMessageHistory(ArrayList<Message> newMessages) {
         for (Message item : newMessages) {
             this.UpdateMessageHistory(item);
         }
@@ -195,16 +196,16 @@ public class ChatFrame extends javax.swing.JFrame {
 
     private void SendenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendenButtonActionPerformed
         if ( !this.MessageTextField.getText().equals("") ) {
-            Message sentMessage = new Message();
-            sentMessage.messageText = this.MessageTextField.getText();
-            sentMessage.userNickname = Application.RegisterAndLoginDialog.getUserName();
-            Application.SocketHandler.OutgoingMessages.offer(sentMessage);
+            Message messageToServer = new Message();
+            messageToServer.messageText = this.MessageTextField.getText();
+            messageToServer.userNickname = Application.RegisterAndLoginDialog.getUserName();
+            Application.SocketHandler.Send(messageToServer);
             this.MessageTextField.setText("");
         }
     }//GEN-LAST:event_SendenButtonActionPerformed
 
     private void TrennenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TrennenButtonActionPerformed
-        Application.SocketHandler.TerminateSocketThread();
+        Application.SocketHandler.StopCommunicationTasks();
         Application.SocketHandler.CloseSocketConnection();
         this.dispose();
         Application.RegisterAndLoginDialog.setVisible(true);

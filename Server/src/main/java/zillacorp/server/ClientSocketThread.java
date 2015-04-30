@@ -102,7 +102,7 @@ public class ClientSocketThread extends Thread implements Runnable
         }
         
         HistoryRequest inputAsHistoryRequest = JsonDeserializer.deserializeHistoryRequest(inputAsJson);
-        if (inputAsUserRegistered != null)
+        if (inputAsHistoryRequest != null)
         {
             handleHistoryRequest(inputAsHistoryRequest);
             return;
