@@ -167,6 +167,7 @@ public class ServerThread extends Thread implements Runnable
             }
 
             databaseMessageThread.interrupt();
+            databaseMessageThread.messageDatabaseChangesClient.shutdown();
             databaseMessageThread.messageDatabaseClient.shutdown();
         } catch (Exception ex) 
         {

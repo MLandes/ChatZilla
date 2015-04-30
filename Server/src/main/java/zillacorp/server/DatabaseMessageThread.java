@@ -26,6 +26,7 @@ import zillacorp.utils.MessageSorter;
  */
 public class DatabaseMessageThread extends Thread implements Runnable
 {
+    CouchDbClient messageDatabaseChangesClient;
     CouchDbClient messageDatabaseClient;
     
     public DatabaseMessageThread()
@@ -45,7 +46,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
                 if(messageChangesFeed.next() != null)
                 {
                     JsonObject serializedMessage = messageChangesFeed.next().getDoc().getAsJsonObject();
-                    Message message = JsonDeserializer.deserializeMessage(serializedMessage.getAsString());
+                    Message message = JsonDeserializer.deserializeMessage(serializedMessage.toString());
                     ServerThread.messagesFromDatabase.add(message);
                 }
             }
@@ -80,9 +81,9 @@ public class DatabaseMessageThread extends Thread implements Runnable
 
     private Changes getMessageChangesFeed() 
     {
-        String lastUpdateSequence = messageDatabaseClient.context().info().getUpdateSeq();
+        String lastUpdateSequence = messageDatabaseChangesClient.context().info().getUpdateSeq();
         
-        return messageDatabaseClient.changes()
+        return messageDatabaseChangesClient.changes()
                 .includeDocs(true)
                 .since(lastUpdateSequence)
                 .heartBeat(30000)
@@ -101,6 +102,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
             .setConnectionTimeout(0);
         try
         {
+            messageDatabaseChangesClient = new CouchDbClient(properties);
             messageDatabaseClient = new CouchDbClient(properties);
             return true;
         }
@@ -113,7 +115,7 @@ public class DatabaseMessageThread extends Thread implements Runnable
     
     private List<JsonObject> getAllMessageDocumentsFromDatabase()
     {
-        return messageDatabaseClient.view("_all_docs")
+        return messageDatabaseChangesClient.view("_all_docs")
                 .includeDocs(true)
                 .query(JsonObject.class);
     }
