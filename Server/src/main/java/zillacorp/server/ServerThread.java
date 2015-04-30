@@ -161,6 +161,7 @@ public class ServerThread extends Thread implements Runnable
             try 
             {
                 serverSocketThread.serverSocket.close();
+                serverSocketThread.serverSocket = null;
             } catch (IOException ex) 
             {
                 Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
