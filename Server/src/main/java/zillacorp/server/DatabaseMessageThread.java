@@ -52,10 +52,10 @@ public class DatabaseMessageThread extends Thread implements Runnable
             }
         } catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(ServerThread.applicationFrame,
-                    "Datenbank nicht erreichbar. Bitte zu anderer IP verbinden.", 
-                    "Database Error", 
-                    JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(ServerThread.applicationFrame,
+//                    "Datenbank nicht erreichbar. Bitte zu anderer IP verbinden.", 
+//                    "Database Error", 
+//                    JOptionPane.ERROR_MESSAGE);
             
             ServerThread.TerminateThisThread();
         }
