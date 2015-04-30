@@ -65,9 +65,9 @@ public class ClientSocketThread extends Thread implements Runnable
     
     public void sendMessageToClient(Message message)
     {
-        while (!hasHistoryBeenSent) {            
-            //wait
-        }
+//        while (!hasHistoryBeenSent) {            
+//            //wait
+//        }
         String serializedMessage = new Gson().toJson(message);
         outputToClient.println(serializedMessage);
     }
